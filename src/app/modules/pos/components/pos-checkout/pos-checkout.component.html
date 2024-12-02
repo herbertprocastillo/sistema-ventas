@@ -1,0 +1,23 @@
+<div class="card shadow rounded border-0 p-3 mb-2 mb-xxl-3">
+
+  <div class="row">
+    <div class="col-6">
+      <!-- SELECT PAY METHOD -->
+      <div class="form-floating mb-3">
+        <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
+          <option selected>Metodo de pago</option>
+          <option value="1">EFECTIVO</option>
+          <option value="2">YAPE</option>
+          <option value="3">TARJETA DE CREDITO</option>
+        </select>
+        <label for="floatingSelect">Seleccione</label>
+      </div>
+    </div>
+    <div class="col-6 text-end">
+      <h4 class="mb-3">Total: S/.{{ total }}</h4>
+    </div>
+  </div>
+
+
+  <button (click)="processSale()" class="btn btn-primary btn-block">Registrar Venta</button>
+</div>

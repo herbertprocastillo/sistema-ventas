@@ -1,0 +1,38 @@
+<div class="card shadow rounded border-light-subtle p-3">
+  <p class="fs-6 fw-bold">EDITAR CATEGORIA</p>
+
+  <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+
+    <!-- CATEGORY -->
+    <div class="form-floating mb-3">
+      <input
+        type="text"
+        class="form-control"
+        id="nameInput"
+        formControlName="name"
+        required
+      >
+      <label for="nameInput">Nombre de la categoria</label>
+      <div
+        *ngIf="editForm.controls['name'].invalid && (editForm.controls['name'].dirty)"
+        class="text-danger">
+        El nombre de la categoría es obligatorio.
+      </div>
+    </div>
+
+    <!-- BUTTON -->
+    <div class="row">
+      <div class="col-6">
+        <button type="reset" class="btn btn-danger w-100" (click)="getCancel(true)">
+          Cancelar
+        </button>
+      </div>
+      <div class="col-6">
+        <button type="submit" class="btn btn-primary w-100" [disabled]="editForm.invalid">
+          ACTUALIZAR
+        </button>
+      </div>
+    </div>
+
+  </form>
+</div>

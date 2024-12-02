@@ -1,0 +1,35 @@
+<div class="card shadow rounded border-0 p-3">
+  <form [formGroup]="newUserForm" (ngSubmit)="onSubmit()">
+
+    <!-- EMAIL -->
+    <div class="form-floating mb-3">
+      <input type="email" class="form-control" id="emailInput" formControlName="email" required>
+      <label for="emailInput">Correo electrónico</label>
+    </div>
+
+    <!-- PASSWORD -->
+    <div class="form-floating mb-3">
+      <input type="text" class="form-control" id="passwordInput" formControlName="password" required>
+      <label for="passwordInput">Contraseña</label>
+    </div>
+
+    <!-- DISPLAY NAME -->
+    <div class="form-floating mb-3">
+      <input type="text" class="form-control" id="displayNameInput" formControlName="displayName" required>
+      <label for="displayNameInput">Nombre y Apellidos</label>
+    </div>
+
+    <!-- ROLE -->
+    <div class="form-floating mb-3">
+      <select class="form-select" id="roleSelect" formControlName="role">
+
+        <option value="admin">Administrador</option>
+        <option value="empleado">Empleado</option>
+      </select>
+      <label for="roleSelect">Seleccionar el Rol</label>
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100" [disabled]="newUserForm.invalid">Registrar</button>
+
+  </form>
+</div>

@@ -1,0 +1,36 @@
+<app-warehouse-navbar></app-warehouse-navbar>
+
+<div class="container-fluid container-xxl mt-2 mt-xxl-3">
+
+  <!-- BAR TITLE -->
+  <div class="card shadow rounded border-0 p-3 mb-3">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb m-0">
+        <li class="breadcrumb-item fs-5" style="cursor: pointer" [routerLink]="'/home'">
+          <i class="fa-solid fa-house"></i>
+        </li>
+        <li class="breadcrumb-item fw-medium fs-5" [routerLink]="'/warehouse'" style="cursor: pointer"
+            aria-current="page">ALMACEN
+        </li>
+        <li class="breadcrumb-item fw-medium fs-5" aria-current="page">MOVIMIENTOS</li>
+      </ol>
+    </nav>
+  </div>
+
+  <div class="row">
+    <div class="col-4">
+
+      @if (movementEdit) {
+        <app-warehouse-movements-edit></app-warehouse-movements-edit>
+      } @else {
+        <app-warehouse-movements-new></app-warehouse-movements-new>
+      }
+
+    </div>
+    <div class="col-8">
+
+      <app-warehouse-movements-list></app-warehouse-movements-list>
+
+    </div>
+  </div>
+</div>

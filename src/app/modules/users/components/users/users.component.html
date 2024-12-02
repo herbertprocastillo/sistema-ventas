@@ -1,0 +1,32 @@
+<app-navbar></app-navbar>
+
+<div class="container-fluid container-xxl mt-2 mt-xxl-3">
+
+  <!-- BAR TITLE AND BUTTONS -->
+  <div class="card shadow rounded border-0 p-3 mb-3">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb m-0">
+        <li class="breadcrumb-item fs-5" style="cursor: pointer" [routerLink]="'/home'">
+          <i class="fa-solid fa-house"></i>
+        </li>
+        <li class="breadcrumb-item fw-medium fs-5" aria-current="page">USUARIOS</li>
+      </ol>
+    </nav>
+  </div>
+
+
+  <!-- FORM NEW & LIST -->
+  <div class="row">
+    <div class="col-4">
+      @if (userToEdit) {
+        <app-users-edit [user]="userToEdit" (editCancel)="getCancel($event)"></app-users-edit>
+      } @else {
+        <app-users-new></app-users-new>
+      }
+    </div>
+
+    <div class="col-8">
+      <app-users-list (userEdit)="getUserEdit($event)"></app-users-list>
+    </div>
+  </div>
+</div>

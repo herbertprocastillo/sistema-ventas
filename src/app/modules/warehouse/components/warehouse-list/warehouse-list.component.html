@@ -1,0 +1,79 @@
+<div class="card shadow rounded border-light-subtle p-3">
+  <div class="table-responsive">
+    <table class="table table-striped text-center">
+      <thead>
+      <tr class="text-nowrap">
+        <th scope="col">#</th>
+        <th scope="col"></th>
+        <th scope="col"></th>
+        <th scope="col">ALMACEN</th>
+        <th scope="col">REGISTRADO POR</th>
+        <th scope="col">FECHA DE REGISTRO</th>
+        <th scope="col">ACTUALIZADO POR</th>
+        <th scope="col">FECHA DE ACTUALIZACION</th>
+      </tr>
+      </thead>
+      <tbody>
+        @for (warehouse of (warehouses$ |async) | slice:(page - 1) * pageSize: page * pageSize; track i; let i = $index) {
+          <tr class="text-nowrap">
+            <th scope="row">{{ i + 1 }}</th>
+
+            <!-- EDIT BUTTON -->
+            <td>
+              <button type="button" class="btn btn-primary btn-sm" (click)="getEditWarehouse(warehouse)">
+                <i class="fa-solid fa-pen-to-square"></i>
+              </button>
+            </td>
+
+            <!-- BUTTON DELETE & MODAL DELETE -->
+            <td>
+              <button type="button" class="btn btn-danger btn-sm"
+                      (click)="openDeleteModal(deleteModal,warehouse.id)">
+                <i class="fa-regular fa-trash-can"></i>
+              </button>
+              <ng-template #deleteModal let-modal>
+                <div class="modal-header">
+                  <h4 class="modal-title">Confirmación de Eliminación</h4>
+                  <button type="button" class="btn-close" aria-label="Cerrar" (click)="modal.dismiss()"></button>
+                </div>
+                <div class="modal-body">
+                  <p>¿Estás seguro que deseas eliminar el almacen <strong>{{ warehouse.name }}</strong>?</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-danger" (click)="modal.close('confirm')">Sí, eliminar
+                  </button>
+                  <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Cancelar</button>
+                </div>
+              </ng-template>
+            </td>
+
+            <!-- NAME -->
+            <td>{{ warehouse.name }}</td>
+
+            <!-- CREATED BY -->
+            <td>
+              <app-users-by-id [userId]="warehouse.createdBy"></app-users-by-id>
+            </td>
+
+            <!-- CREATED AT -->
+            <td>
+              {{ warehouse.createdAt.toMillis() | date:'mediumDate' }}
+            </td>
+
+            <!-- UPDATED BY -->
+            <td>
+              <app-users-by-id [userId]="warehouse.createdBy"></app-users-by-id>
+            </td>
+
+            <!-- UPDATED AT -->
+            <td>
+              {{ warehouse.updatedAt.toMillis() | date:'mediumDate' }}
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+    <ngb-pagination [collectionSize]="(warehouses$ | async)?.length || 0" [(page)]="page" [pageSize]="pageSize"
+                    aria-label="Default pagination"/>
+  </div>
+</div>

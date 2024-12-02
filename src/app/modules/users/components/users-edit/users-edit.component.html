@@ -1,0 +1,30 @@
+<div class="card shadow rounded border-0 p-3">
+<form [formGroup]="editUserForm" (ngSubmit)="onSubmit()">
+
+  <!-- DISPLAY NAME -->
+  <div class="form-floating mb-3">
+    <input type="text" class="form-control" id="displayNameInput" formControlName="displayName" required>
+    <label for="displayNameInput">Nombre y Apellidos</label>
+  </div>
+
+  <!-- ROLE -->
+  <div class="form-floating mb-3">
+    <select class="form-select" id="roleSelect" formControlName="role">
+
+      <option value="admin">Administrador</option>
+      <option value="empleado">Empleado</option>
+    </select>
+    <label for="roleSelect">Seleccionar el Rol</label>
+  </div>
+
+  <div class="row">
+    <div class="col-6">
+      <button type="reset" class="btn btn-danger w-100" (click)="getBack()">Cancelar</button>
+    </div>
+    <div class="col-6">
+      <button type="submit" class="btn btn-primary w-100" [disabled]="editUserForm.invalid">Actualizar</button>
+    </div>
+  </div>
+
+</form>
+</div>

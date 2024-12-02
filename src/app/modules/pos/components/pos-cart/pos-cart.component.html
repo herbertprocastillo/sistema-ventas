@@ -1,0 +1,11 @@
+<div class="card shadow rounded border-0 p-3 mb-2 mb-xxl-3">
+  <h3 class="mb-3">Carrito de Compras</h3>
+
+  <ul class="list-group mb-3">
+    <li class="list-group-item" *ngFor="let item of items">
+      {{ item.productName }} - {{ item.quantity }} x S/.{{ item.price }} = S/.{{ item.subtotal }}
+      <button (click)="onRemoveItem(item)" class="btn btn-danger btn-sm float-end">X</button>
+    </li>
+  </ul>
+  <!--<h4>Total: S/.{{ getTotal() }}</h4>-->
+</div>

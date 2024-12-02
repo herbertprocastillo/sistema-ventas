@@ -1,0 +1,26 @@
+<app-pos-navbar></app-pos-navbar>
+
+<div class="container-fluid container-xxl mt-2 mt-xxl-3">
+  <div class="row">
+    <div class="col-8">
+
+      <!-- PRODUCTS LIST -->
+      <app-pos-products (addToCart)="addToCart($event)"></app-pos-products>
+    </div>
+    <div class="col-4">
+
+      <!-- SALE CART -->
+      <app-pos-cart
+        [items]="cartItems"
+        (removeItem)="removeFromCart($event)"
+      ></app-pos-cart>
+
+      <!-- SALE CHECKOUT -->
+      <app-pos-checkout
+        [items]="cartItems"
+        [total]="getTotal()"
+        (clear)="clearCart()"
+      ></app-pos-checkout>
+    </div>
+  </div>
+</div>

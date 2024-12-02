@@ -1,0 +1,7 @@
+<ng-container *ngIf="user$ | async as user; else noData">
+  {{ user.displayName }}
+</ng-container>
+
+<ng-template #noData>
+  <p class="text-muted">No hay datos del usuario.</p>
+</ng-template>

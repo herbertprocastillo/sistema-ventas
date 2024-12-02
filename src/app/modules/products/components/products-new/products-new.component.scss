@@ -1,0 +1,7 @@
+.preview-container img {
+  max-width: 100%;
+  max-height: 200px; /* Limita la altura máxima */
+  object-fit: contain; /* Ajusta la imagen manteniendo su proporción */
+  border: 1px solid #ddd; /* Opcional: Agrega un borde para mejor visualización */
+  border-radius: 5px; /* Opcional: Bordes redondeados */
+}

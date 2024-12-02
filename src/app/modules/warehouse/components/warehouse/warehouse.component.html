@@ -1,0 +1,40 @@
+<app-warehouse-navbar></app-warehouse-navbar>
+
+<div class="container-fluid container-xxl mt-2">
+
+  <!-- TITLE, NAVS AND BUTTONS -->
+  <div class="card shadow rounded border--light-subtle p-3 mb-2">
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+      <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item">
+          <i class="fa-solid fa-house fa-lg" style="cursor: pointer" [routerLink]="'/home'"></i>
+        </li>
+        <li class="breadcrumb-item active fs-5" aria-current="page">
+          ALMACEN
+        </li>
+      </ol>
+    </nav>
+  </div>
+
+  <!-- FORM NEW AND LIST -->
+  <div class="row">
+
+    <div class="col-4">
+      @if (editWarehouse) {
+        <app-warehouse-edit
+          [warehouse]="editWarehouse"
+          (editCancel)="getCancel($event)"
+        ></app-warehouse-edit>
+
+      } @else {
+        <app-warehouse-new></app-warehouse-new>
+      }
+    </div>
+    <div class="col-8">
+      <app-warehouse-list
+        (warehouse)="getEditWarehouse($event)"
+      ></app-warehouse-list>
+
+    </div>
+  </div>
+</div>

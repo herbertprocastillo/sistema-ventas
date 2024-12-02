@@ -1,0 +1,46 @@
+<app-warehouse-navbar></app-warehouse-navbar>
+
+<div class="container-fluid container-xxl mt-2 mt-xxl-3">
+
+  <!-- BAR TITLE -->
+  <div class="card shadow rounded border-0 p-3 mb-3">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb m-0">
+        <li class="breadcrumb-item fs-5" style="cursor: pointer" [routerLink]="'/home'">
+          <i class="fa-solid fa-house"></i>
+        </li>
+        <li class="breadcrumb-item fw-medium fs-5" [routerLink]="'/warehouse'" style="cursor: pointer"
+            aria-current="page">ALMACEN
+        </li>
+        <li class="breadcrumb-item fw-medium fs-5" aria-current="page">INVENTARIO</li>
+      </ol>
+    </nav>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <div class="card shadow rounded border-0 p-3 mb-3">
+        <table class="table">
+          <thead>
+          <tr>
+            <th>#</th>
+            <th>Producto</th>
+            <th>Descripción</th>
+            <th>Precio</th>
+            <th>Stock</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let item of inventory; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ item.product.name }}</td>
+            <td>{{ item.product.description }}</td>
+            <td>S/. {{ item.product.price | number: '1.2-2' }}</td>
+            <td>{{ item.stock }}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

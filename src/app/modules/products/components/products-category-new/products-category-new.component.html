@@ -1,0 +1,24 @@
+<div class="card shadow rounded border-light-subtle p-3">
+  <p class="fs-6 fw-bold">NUEVA CATEGORIA</p>
+
+  <form [formGroup]="newForm" (ngSubmit)="onSubmit()">
+
+    <!-- CATEGORY -->
+    <div class="form-floating mb-3">
+      <input
+        type="text"
+        class="form-control"
+        id="nameInput"
+        formControlName="name"
+        required
+      >
+      <label for="nameInput">Por Ejemplo: Bebidas, Galletas, Kekes etc.</label>
+    </div>
+
+    <!-- BUTTON -->
+    <button type="submit" class="btn btn-primary w-100" [disabled]="newForm.invalid">
+      REGISTRAR
+    </button>
+
+  </form>
+</div>

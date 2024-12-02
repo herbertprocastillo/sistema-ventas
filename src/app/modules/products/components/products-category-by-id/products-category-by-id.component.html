@@ -1,0 +1,7 @@
+<ng-container *ngIf="category$ | async as category; else noData">
+  {{ category.name.toUpperCase() }}
+</ng-container>
+
+<ng-template #noData>
+  <p class="text-muted">No hay datos de la categoria.</p>
+</ng-template>
