@@ -1,0 +1,135 @@
+<div class="container-fluid container-xxl mt-2">
+
+  <!-- NAVS AND BUTTONS -->
+  <div class="card shadow rounded border-light-subtle p-3 mb-2">
+    <div class="row">
+      <div class="col-6">
+        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+          <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item">
+              <i class="fa-solid fa-house fa-lg" style="cursor: pointer" [routerLink]="'/home'"></i>
+            </li>
+            <li class="breadcrumb-item fs-5" style="cursor: pointer" aria-current="page"
+                [routerLink]="'/warehouse'">
+              ALMACEN
+            </li>
+            <li class="breadcrumb-item active fs-5" aria-current="page">
+              MOVIMIENTOS
+            </li>
+          </ol>
+        </nav>
+      </div>
+      <div class="col-6 d-flex justify-content-end">
+        <!-- BTN NEW -->
+        <button type="button" class="btn btn-primary btn-sm me-2" (click)="getTemplate('NEW')">
+          <i class="fa-solid fa-plus"></i>
+          Nuevo
+        </button>
+        <!-- BTN PDF-->
+        <button type="button" class="btn btn-danger btn-sm me-2">
+          <i class="fa-solid fa-file-pdf"></i>
+          Exportar
+        </button>
+        <!-- BTN EXCEL -->
+        <button type="button" class="btn btn-success btn-sm">
+          <i class="fa-solid fa-file-excel"></i>
+          Exportar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIST MOVEMENTS -->
+  <div class="card shadow rounded border-0 p-3">
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+        <tr class="text-nowrap text-center">
+          <th scope="col">#</th>
+          <th scope="col"></th>
+          <th scope="col"></th>
+          <th scope="col">MOVIMIENTO</th>
+          <th scope="col">PRODUCTO</th>
+          <th scope="col">CANTIDAD</th>
+          <th scope="col">PRECIO</th>
+          <th scope="col">REGISTRADO POR:</th>
+          <th scope="col">F.REGISTRO:</th>
+          <th scope="col">ACTUALIZADO POR:</th>
+          <th scope="col">F. ACTUALIZACION</th>
+        </tr>
+        </thead>
+        <tbody>
+          @for (movement of (listMovements$ | async) | slice:(page - 1) * pageSize: page * pageSize; track i; let i = $index) {
+            <tr class="text-nowrap text-center">
+              <th scope="row">{{ i + 1 }}</th>
+              <td>
+                <button type="button" class="btn btn-primary btn-sm" (click)="getEdit(movement)">
+                  <i class="fa-solid fa-pen-to-square"></i>
+                </button>
+              </td>
+
+              <!-- BUTTON DELETE & MODAL DELETE -->
+              <td>
+                <button type="button" class="btn btn-danger btn-sm"
+                        (click)="openDeleteModal(deleteModal,movement.id)">
+                  <i class="fa-regular fa-trash-can"></i>
+                </button>
+                <ng-template #deleteModal let-modal>
+                  <div class="modal-header">
+                    <h4 class="modal-title">Confirmación de Eliminación</h4>
+                    <button type="button" class="btn-close" aria-label="Cerrar" (click)="modal.dismiss()"></button>
+                  </div>
+                  <div class="modal-body">
+                    <p>¿Estás seguro que deseas eliminar el movimiento?</p>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" (click)="modal.close('confirm')">Sí, eliminar
+                    </button>
+                    <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Cancelar</button>
+                  </div>
+                </ng-template>
+              </td>
+              <!-- TYPE MOVEMENT -->
+              <td class="text-white" [ngStyle]="{'background-color': movement.type === 'INGRESO' ? 'green':'red'}">
+                {{ movement.type }}
+              </td>
+              <!-- PRODUCT INFO -->
+              <td>
+                <app-product-info [productId]="movement.product_id"></app-product-info>
+              </td>
+              <!-- QUANTITY -->
+              <td>
+                {{ movement.quantity }}
+              </td>
+              <!-- PRICE -->
+              <td *ngIf="movement.type ==='INGRESO'">
+                {{ movement.price | currency: 'S/. ' }}
+              </td>
+              <td *ngIf="movement.type ==='SALIDA'">
+                --
+              </td>
+              <!-- USER REGISTER -->
+              <td>
+                <app-users-by-id [userId]="movement.createdBy"></app-users-by-id>
+              </td>
+              <!-- DATE REGISTER -->
+              <td>
+                {{ movement.createdAt.toMillis() | date:'mediumDate' }}
+              </td>
+              <!-- USER UPDATED -->
+              <td>
+                <app-users-by-id [userId]="movement.createdBy"></app-users-by-id>
+              </td>
+              <!-- DATE UPDATED -->
+              <td>
+                {{ movement.updatedAt?.toMillis() | date:'mediumDate' }}
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+      <ngb-pagination [collectionSize]="(listMovements$ | async)?.length || 0" [(page)]="page" [pageSize]="pageSize"
+                      aria-label="Default pagination"/>
+    </div>
+  </div>
+</div>

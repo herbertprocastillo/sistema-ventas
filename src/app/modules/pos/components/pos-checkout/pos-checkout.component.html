@@ -1,23 +1,70 @@
-<div class="card shadow rounded border-0 p-3 mb-2 mb-xxl-3">
+<div class="card shadow rounded border-light-subtle p-3 container-checkout">
+  <div class="container">
+    <div class="row">
+      <div class="col-6">
 
-  <div class="row">
-    <div class="col-6">
-      <!-- SELECT PAY METHOD -->
-      <div class="form-floating mb-3">
-        <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
-          <option selected>Metodo de pago</option>
-          <option value="1">EFECTIVO</option>
-          <option value="2">YAPE</option>
-          <option value="3">TARJETA DE CREDITO</option>
-        </select>
-        <label for="floatingSelect">Seleccione</label>
+        <!-- PAY METHOD -->
+        <div class="form-floating mb-2">
+          <select
+            class="form-select"
+            id="payMethodSelect"
+            [(ngModel)]="paymentMethod"
+            (change)="onPaymentMethodChange()"
+          >
+            <option value="EFECTIVO">EFECTIVO</option>
+            <option value="YAPE">YAPE</option>
+            <option value="TARJETA DE CREDITO">TARJETA DE CREDITO</option>
+          </select>
+          <label for="payMethodSelect">Metodo de pago</label>
+        </div>
+
+        <!-- PAY RECEIVED -->
+        <div class="form-floating mb-2" *ngIf="paymentMethod === 'EFECTIVO'">
+          <input
+            type="number"
+            class="form-control"
+            id="cashReceiveInput"
+            [(ngModel)]="cashReceived"
+            (input)="calculateChange()"
+            placeholder="Pago recibido"
+          >
+          <label for="cashReceiveInput">Pago recibido</label>
+        </div>
+
+        <!-- CASH CHANGE -->
+        <div class="form-floating mb-3" *ngIf="paymentMethod === 'EFECTIVO'">
+          <input
+            type="number"
+            class="form-control"
+            id="cashChangeInput"
+            placeholder="Pago recibido"
+            [value]="cashChange"
+            readonly
+          >
+          <label for="cashChangeInput">Vuelto</label>
+        </div>
+
+      </div>
+      <div class="col-6 text-end">
+        <h4 class="mb-3">Total: S/.{{ total }}</h4>
       </div>
     </div>
-    <div class="col-6 text-end">
-      <h4 class="mb-3">Total: S/.{{ total }}</h4>
+
+
+    <div class="row">
+      <div class="col-6">
+        <button type="button" class="btn btn-secondary w-100">
+          <i class="fa-solid fa-print me-2"></i>
+          TICKET
+        </button>
+      </div>
+      <div class="col-6">
+        <button (click)="addSale()" class="btn btn-primary w-100">
+          <i class="fa-solid fa-dollar-sign"></i>
+          VENDER
+        </button>
+      </div>
     </div>
+
   </div>
-
-
-  <button (click)="processSale()" class="btn btn-primary btn-block">Registrar Venta</button>
 </div>

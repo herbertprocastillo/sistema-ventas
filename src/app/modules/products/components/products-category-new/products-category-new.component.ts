@@ -15,7 +15,6 @@ export class ProductsCategoryNewComponent {
   private categoriesService = inject(CategoriesService);
   private toastService = inject(ToastService);
   private fb = inject(FormBuilder);
-
   /** VARIABLES **/
   public newForm: FormGroup;
 

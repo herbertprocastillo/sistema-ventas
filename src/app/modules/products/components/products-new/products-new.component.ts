@@ -44,7 +44,7 @@ export class ProductsNewComponent {
       name: ['', [Validators.required]],
       description: ['', [Validators.required]],
       price: ['', [Validators.required, Validators.min(1)]],
-      barCode: ['', [Validators.required]],
+      barCode: [''],
       imageUrl: [null, [Validators.required]],
     });
 
@@ -79,8 +79,8 @@ export class ProductsNewComponent {
       const productData = {...this.newForm.value};
       try {
         await this.productsService.addProduct(productData, this.selectedFile);
-        this.toastService.showSuccess("EXITO! Producto registrado exitosamente.");
         this.newForm.reset();
+        this.toastService.showSuccess("EXITO! Producto registrado exitosamente.");
         this.previewUrl = null;
         this.selectedFile = null;
         this.imageInput.nativeElement.value = '';

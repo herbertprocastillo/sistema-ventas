@@ -1,26 +1,24 @@
 <app-pos-navbar></app-pos-navbar>
 
-<div class="container-fluid container-xxl mt-2 mt-xxl-3">
+<div class="container-fluid container-xxl mt-2">
   <div class="row">
-    <div class="col-8">
+    <div class="col-7 col-xl-8">
 
       <!-- PRODUCTS LIST -->
       <app-pos-products (addToCart)="addToCart($event)"></app-pos-products>
+
+      <!-- RENT FIELDS LIST -->
+      <!--<app-pos-rent (addToRent)="addToRent($event)"></app-pos-rent>-->
+
     </div>
-    <div class="col-4">
+    <div class="col-5 col-xl-4">
 
       <!-- SALE CART -->
-      <app-pos-cart
-        [items]="cartItems"
-        (removeItem)="removeFromCart($event)"
-      ></app-pos-cart>
+      <app-pos-cart [items]="cartItems" (removeItem)="removeFromCart($event)"></app-pos-cart>
 
       <!-- SALE CHECKOUT -->
-      <app-pos-checkout
-        [items]="cartItems"
-        [total]="getTotal()"
-        (clear)="clearCart()"
-      ></app-pos-checkout>
+      <app-pos-checkout [items]="cartItems" [total]="getTotal()" (clear)="clearCart()"></app-pos-checkout>
+
     </div>
   </div>
 </div>

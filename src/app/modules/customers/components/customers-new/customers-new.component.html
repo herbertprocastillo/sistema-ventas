@@ -1,0 +1,36 @@
+<div id="newCustomer" class="card shadow rounded border-light-subtle p-3">
+  <h5 class="fw-medium mb-3">NUEVO CLIENTE</h5>
+
+  <form [formGroup]="newForm" (ngSubmit)="onSubmit()">
+
+    <!-- FULL NAME -->
+    <div class="form-floating mb-3">
+      <input type="text" class="form-control" id="fullNameInput" formControlName="fullName" required>
+      <label for="fullNameInput">NOMBRE Y APELLIDOS</label>
+    </div>
+
+    <!-- EMAIL -->
+    <div class="form-floating mb-3">
+      <input type="email" class="form-control" id="emailInput" formControlName="email" required>
+      <label for="emailInput">CORREO ELECTRÓNICO</label>
+    </div>
+
+    <!-- DNI -->
+    <div class="form-floating mb-3">
+      <input type="text" [maxlength]="8" class="form-control" id="dniInput" formControlName="dni" required>
+      <label for="dniInput">Nº DNI</label>
+    </div>
+
+    <!-- PHONE -->
+    <div class="form-floating mb-3">
+      <input type="text" class="form-control" id="phoneInput" formControlName="phone" required>
+      <label for="phoneInput">TELEFÓNO</label>
+    </div>
+
+    <!-- BTN SUBMIT -->
+    <button type="submit" class="btn btn-primary w-100" [disabled]="newForm.invalid">
+      REGISTRAR
+    </button>
+
+  </form>
+</div>

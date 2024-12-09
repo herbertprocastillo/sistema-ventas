@@ -1,37 +1,39 @@
-<div class="card shadow rounded border-0 p-3 mb-2 mb-xxl-3">
-  <h3 class="fw-medium">Productos</h3>
+<div class="card shadow rounded border-light-subtle p-3">
 
-  <!-- SEARCH INPUT PRODUCTS -->
-  <div class="row form-floating mb-3">
-    <input
-      type="text"
-      class="form-control"
-      id="floatingInput"
-      [(ngModel)]="searchTerm"
-    >
-    <label for="floatingInput">Buscar producto por nombre o escanee el código de barras</label>
+  <div class="row mb-3">
+    <div class="col-4">
+      <h3 class="fw-medium">Productos</h3>
+    </div>
+    <div class="col-8">
+      <!-- SEARCH INPUT PRODUCTS -->
+      <input
+        type="text"
+        class="form-control border-primary-subtle"
+        id="floatingInput"
+        [(ngModel)]="searchTerm"
+        (input)="onSearchInput()"
+        placeholder="Buscar por nombre o escanee el código de barras"
+        #searchInput
+      >
+    </div>
   </div>
 
-  <!--<ul class="list-group">
-    <li
-      class="list-group-item"
-      style="cursor: pointer"
-      *ngFor="let product of filterProducts()"
-      (click)="onAddToCart(product)"
-    >
-      <img src="{{product.imageUrl}}" width="40" alt="">
-      {{ product.name }} - S/.{{ product.price }}
-    </li>
-  </ul>-->
 
-
-  <div class="row">
-    <div class="col-3" *ngFor="let product of filterProducts()">
-      <div class="card shadow border-0 rounded p-1 mb-3 text-center" (click)="onAddToCart(product)"
-           style="cursor: pointer">
-        <img class="img-fluid mb-3" style="max-height: 100px" src="{{product.imageUrl}}" alt="">
-        <p class="fw-medium mb-1">{{ product.name }}</p>
-        <p class="text-muted small">{{ product.description }}</p>
+  <div class="container list-products">
+    <div class="row">
+      <div class="col-4 col-xl-3 mb-3" *ngFor="let product of filterProducts()">
+        <div class="card shadow border-light-subtle rounded p-1 mb-3 text-center" (click)="onAddToCart(product)"
+             style="cursor: pointer">
+          <img
+            class="img-fluid m-auto"
+            src="{{product.imageUrl}}"
+            alt=""
+          >
+          <p class="fw-medium mb-1 text-uppercase">{{ product.name }}</p>
+          <p class="text-muted small">{{ product.description }}</p>
+        </div>
       </div>
     </div>
   </div>
+
+</div>

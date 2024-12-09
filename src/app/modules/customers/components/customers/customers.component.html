@@ -1,1 +1,36 @@
-<p>customers works!</p>
+<app-customers-navbar></app-customers-navbar>
+
+<div class="container-fluid container-xxl mt-2">
+
+  <!-- NAVS AND BUTTONS -->
+  <div class="card shadow rounded border-light-subtle p-3 mb-2">
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+      <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item">
+          <i class="fa-solid fa-house fa-lg" style="cursor: pointer" [routerLink]="'/home'"></i>
+        </li>
+        <li class="breadcrumb-item active fs-5" aria-current="page">
+          CLIENTES
+        </li>
+      </ol>
+    </nav>
+  </div>
+
+  <div class="row">
+    <div class="col-5 col-xl-4">
+      @if (editCustomer) {
+        <app-customers-edit
+          [customer]="editCustomer"
+          (editCancel)="getCancel($event)"
+        ></app-customers-edit>
+      } @else {
+        <app-customers-new></app-customers-new>
+      }
+
+    </div>
+    <div class="col-7 col-xl-8">
+
+      <app-customers-list (customer)="getEditCustomer($event)"></app-customers-list>
+    </div>
+  </div>
+</div>

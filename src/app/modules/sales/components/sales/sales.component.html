@@ -1,1 +1,170 @@
-<p>sales works!</p>
+<app-sales-navbar></app-sales-navbar>
+
+<div class="container-fluid container-xxl mt-2">
+
+  <!-- NAVS AND BUTTONS -->
+  <div class="card shadow rounded border-light-subtle p-3 mb-2">
+    <div class="row">
+      <div class="col-2">
+        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+          <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item">
+              <i class="fa-solid fa-house fa-lg" style="cursor: pointer" [routerLink]="'/home'"></i>
+            </li>
+            <li class="breadcrumb-item fs-5" aria-current="page">
+              VENTAS
+            </li>
+          </ol>
+        </nav>
+      </div>
+      <div class="col-10 d-flex">
+        <div style="width: 35%" class="d-flex justify-content-end">
+          <p class="fs-5 mb-0 mt-1">Filtrar ventas:</p>
+          <button type="button" class="btn btn-outline-danger btn-sm ms-2 rounded-5" *ngIf="selectedDate || paymentMethod" (click)="getCleanFilters()">
+            <i class="fa-solid fa-xmark"></i>
+            Filtros
+          </button>
+        </div>
+        <div style="width: 22%" class="d-flex text-end">
+          <label for="dateFilter" style="width: 35%" class="me-2 mt-2 mb-0">Fecha:</label>
+          <input
+            id="dateFilter"
+            style="width: 65%"
+            class="form-control"
+            type="date"
+            [(ngModel)]="selectedDate"
+          />
+        </div>
+        <div style="width: 25%" class="d-flex text-end">
+          <label for="payMethodSelect" class="w-50 me-2 mt-2 mb-0">Metodo pago:</label>
+          <select
+            class="form-select w-50"
+            id="payMethodSelect"
+            [(ngModel)]="paymentMethod"
+          >
+            <option value="">TODOS</option>
+            <option value="EFECTIVO">EFECTIVO</option>
+            <option value="YAPE">YAPE</option>
+            <option value="TARJETA DE CREDITO">TARJETA DE CREDITO</option>
+          </select>
+        </div>
+        <div style="width: 18%" class="text-end">
+          <button type="button" class="btn btn-warning me-2" (click)="getRoute('/sales/reports')">
+            <i class="fa-solid fa-chart-pie"></i>
+          </button>
+          <button type="button" class="btn btn-danger me-2">
+            <i class="fa-solid fa-file-pdf"></i>
+          </button>
+          <button type="button" class="btn btn-success">
+            <i class="fa-solid fa-file-excel"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIST SALES -->
+  <div class="card shadow rounded border-0 p-3">
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <thead>
+        <tr class="text-nowrap text-center">
+          <th scope="col">#</th>
+          <th scope="col">TOTAL VENTA</th>
+          <th scope="col">DETALLE VENTA</th>
+          <th scope="col">METODO DE PAGO</th>
+          <th scope="col">DETALLE PAGO</th>
+          <th scope="col">VENDIDO POR</th>
+          <th scope="col">FECHA DE VENTA</th>
+        </tr>
+        </thead>
+        <tbody>
+          @for (sale of sales | salesFilter:paymentMethod:selectedDate | slice:(page - 1) * pageSize: page * pageSize; track i; let i = $index) {
+            <tr class="text-nowrap text-center">
+              <th scope="row">{{ (page - 1) * pageSize + i + 1 }}</th>
+
+              <!-- TOTAL SALE -->
+              <td>{{ sale.total | number | currency:'S/. ' }}</td>
+
+              <!-- DETAIL SALE -->
+              <td>
+                <a type="button" class="link" (click)="openDetailSaleModal(detailSale,sale)">Ver detalle</a>
+                <ng-template #detailSale let-modal>
+                  <div class="modal-header">
+                    <h5 class="modal-title">Detalle de la Venta</h5>
+                    <button type="button" class="btn-close" aria-label="Close"
+                            (click)="modal.dismiss('Cross click')"></button>
+                  </div>
+                  <div class="modal-body">
+                    <div class="table-responsive">
+                      <table class="table table-striped">
+                        <thead>
+                        <tr class="text-nowrap text-center">
+                          <th scope="col">#</th>
+                          <th scope="col">PRODUCTO</th>
+                          <th scope="col">CANTIDAD</th>
+                          <th scope="col">PRECIO</th>
+                          <th scope="col">SUBTOTAL</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="text-nowrap text-center" *ngFor="let item of sale.items; let i = index">
+                          <th scope="row">{{ i + 1 }}</th>
+                          <td>{{ item.productName }}</td>
+                          <td>{{ item.quantity }}</td>
+                          <td>{{ item.price | number | currency:' S/. ' }}</td>
+                          <td>{{ item.subtotal | number | currency:' S/. ' }}</td>
+                        </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="text-end">
+                      <p><strong>TOTAL: </strong> {{ sale.total | number | currency:' S/. ' }}</p>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                  </div>
+                </ng-template>
+              </td>
+
+              <!-- PAYMENT METHOD -->
+              <td>{{ sale.paymentMethod }}</td>
+
+              <!-- DETAIL PAYMENT -->
+              <td *ngIf="sale.paymentMethod === 'EFECTIVO'">
+                <a type="button" class="link" (click)="openDetailPaymentModal(detailPayment,sale)">Ver detalle</a>
+                <ng-template #detailPayment let-modal>
+                  <div class="modal-header">
+                    <h5 class="modal-title">Detalle del Pago</h5>
+                    <button type="button" class="btn-close" aria-label="Close"
+                            (click)="modal.dismiss('Cross click')"></button>
+                  </div>
+                  <div class="modal-body">
+                    <p><strong>Monto total: </strong>{{ sale.total | number | currency:' S/. ' }}</p>
+                    <p><strong>Pago con: </strong>{{ sale.cashReceived | number | currency:' S/. ' }}</p>
+                    <p><strong>Se entrego a cambio: </strong>{{ sale.cashChange | number | currency:' S/. ' }}</p>
+                  </div>
+                  <div class="modal-footer">
+                  </div>
+                </ng-template>
+              </td>
+              <td *ngIf="sale.paymentMethod !== 'EFECTIVO'">
+                --
+              </td>
+
+              <!-- CREATED BY -->
+              <td>
+                <app-users-by-id [userId]="sale.createdBy"></app-users-by-id>
+              </td>
+
+              <!-- CREATED AT -->
+              <td>{{ sale.createdAt?.toMillis() |date:'medium' }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+      <ngb-pagination [collectionSize]="sales.length || 0" [(page)]="page" [pageSize]="pageSize"
+                      aria-label="Default pagination"/>
+    </div>
+  </div>
+</div>

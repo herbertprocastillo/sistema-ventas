@@ -1,14 +1,17 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 
-import { SalesRoutingModule } from './sales-routing.module';
+import {SalesRoutingModule} from './sales-routing.module';
+import {GoogleChartsModule} from 'angular-google-charts';
 
 
 @NgModule({
   declarations: [],
   imports: [
     CommonModule,
-    SalesRoutingModule
+    SalesRoutingModule,
+    GoogleChartsModule
   ]
 })
-export class SalesModule { }
+export class SalesModule {
+}

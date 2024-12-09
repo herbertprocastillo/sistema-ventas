@@ -1,5 +1,5 @@
 import {inject, Injectable} from '@angular/core';
-import {addDoc, collection, collectionData, Firestore, Timestamp} from '@angular/fire/firestore';
+import {addDoc, collection, collectionData, Firestore, orderBy, query, Timestamp} from '@angular/fire/firestore';
 import {Sale} from '../interfaces/sale';
 import {AuthService} from '../../auth/services/auth.service';
 import {Observable} from 'rxjs';
@@ -10,16 +10,18 @@ import {Observable} from 'rxjs';
 export class SalesService {
   /** INJECTS **/
   private firestore: Firestore = inject(Firestore);
-  private authService = inject(AuthService);
+  private authService: AuthService = inject(AuthService);
+
   /** COLLECTIONS **/
   private salesCollection = collection(this.firestore, 'sales');
 
-  /** CRUD - GET ALL **/
+  /** GET ALL SALES **/
   getSales(): Observable<Sale[]> {
-    return collectionData(this.salesCollection, {idField: 'id'}) as Observable<Sale[]>;
+    const q = query(this.salesCollection, orderBy('createdAt', 'desc'));
+    return collectionData(q, {idField: 'id'}) as Observable<Sale[]>;
   }
 
-  /** CRUD - ADD SALE **/
+  /** ADD NEW SALE **/
   async addSale(sale: Sale): Promise<void> {
     try {
       const user = this.authService.getCurrentUser();
@@ -28,9 +30,9 @@ export class SalesService {
         sale.createdAt = Timestamp.now();
       }
       await addDoc(this.salesCollection, sale);
-    } catch (error) {
-      console.error("ERROR AL REGISTRAR LA VENTA", error);
-      throw error;
+    } catch (e) {
+      console.error("ERROR! al registrar la venta.", e);
+      throw e;
     }
   }
 

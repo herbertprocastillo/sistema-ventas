@@ -1,0 +1,23 @@
+<app-warehouse-navbar></app-warehouse-navbar>
+
+@if (template === "LIST") {
+  <app-movements-list
+    (editMovement)="getEdit($event)"
+    (template)="getTemplate($event)"
+  ></app-movements-list>
+}
+
+@if (template === "NEW") {
+  <app-movements-new
+    (newCancel)="getCancel($event)"
+    (template)="getTemplate($event)"
+  ></app-movements-new>
+}
+
+@if (template === "EDIT") {
+  <app-movements-edit
+    [movement]="editMovement"
+    (template)="getTemplate($event)"
+    (editCancel)="getCancel($event)"
+  ></app-movements-edit>
+}

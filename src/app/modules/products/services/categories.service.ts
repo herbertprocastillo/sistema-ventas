@@ -7,7 +7,7 @@ import {
   deleteDoc,
   doc,
   docData,
-  Firestore, getDoc, getDocs, orderBy, query,
+  Firestore, getDocs, orderBy, query,
   Timestamp,
   updateDoc, where
 } from '@angular/fire/firestore';
@@ -24,10 +24,9 @@ export class CategoriesService {
   private firestore = inject(Firestore);
   private auth = inject(Auth);
 
-  /** VARIABLES **/
+  /** COLLECTIONS **/
   private readonly categoriesCollection: CollectionReference;
   private readonly productsCollection: CollectionReference;
-  private timestamp = Timestamp.now();
 
   constructor() {
     this.categoriesCollection = collection(this.firestore, 'categories');
@@ -49,6 +48,7 @@ export class CategoriesService {
   /****************************************
    ******* ADD AND UPDATED CATEGORY *******
    ****************************************/
+
   /** VERIFY IF CATEGORY EXISTS **/
   async categoryExists(name: string): Promise<boolean> {
     const refQuery = query(this.categoriesCollection, where('name', '==', name));
@@ -79,9 +79,9 @@ export class CategoriesService {
       if (user) {
         category.name = normalizedName;
         category.createdBy = user.uid;
-        category.createdAt = this.timestamp;
+        category.createdAt = Timestamp.now();
         category.updatedBy = user.uid;
-        category.updatedAt = this.timestamp;
+        category.updatedAt = Timestamp.now();
       }
 
       await addDoc(this.categoriesCollection, category);
@@ -116,7 +116,7 @@ export class CategoriesService {
       if (user) {
         category.name = normalizedName;
         category.updatedBy = user.uid;
-        category.updatedAt = this.timestamp;
+        category.updatedAt = Timestamp.now();
       }
 
       const refDoc = doc(this.firestore, `categories/${id}`);

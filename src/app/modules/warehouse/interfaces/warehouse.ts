@@ -1,25 +1,28 @@
 import {Timestamp} from '@angular/fire/firestore';
 
-export interface Warehouse {
-  id?: string;
-  name: string;
-
-  createdBy: string;
-  createdAt: Timestamp;
-  updatedBy: string;
-  updatedAt: Timestamp;
-}
-
 export interface Movement {
-  id: string;
-  warehouse_id: string;
+  id?: string;
   product_id: string;
-  type: string;
+  type: 'INGRESO' | 'SALIDA';
   quantity: number;
   price: number;
 
   createdBy: string;
   createdAt: Timestamp;
-  updatedBy: string;
-  updatedAt: Timestamp;
+  updatedBy?: string;
+  updatedAt?: Timestamp;
+}
+
+export interface Inventory {
+  id?: string;
+  product_id: string;
+  stock: number;
+
+  price_cost: number;
+  price_sale: number;
+
+  createdBy: string;
+  createdAt: Timestamp;
+  updatedBy?: string;
+  updatedAt?: Timestamp;
 }

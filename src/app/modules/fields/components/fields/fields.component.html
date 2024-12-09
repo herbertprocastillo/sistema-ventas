@@ -1,0 +1,36 @@
+<app-fields-navbar></app-fields-navbar>
+
+<div class="container-fluid container-xxl mt-2">
+
+  <!-- NAVS AND BUTTONS -->
+  <div class="card shadow rounded border-light-subtle p-3 mb-2">
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+      <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item">
+          <i class="fa-solid fa-house fa-lg" style="cursor: pointer" [routerLink]="'/home'"></i>
+        </li>
+        <li class="breadcrumb-item active fs-5" aria-current="page">
+          CAMPOS DE FUTBOL
+        </li>
+      </ol>
+    </nav>
+  </div>
+
+  <div class="row">
+    <div class="col-5 col-xl-4">
+      @if (editField) {
+        <app-fields-edit
+          [field]="editField"
+          (editCancel)="getCancel($event)"
+        ></app-fields-edit>
+      } @else {
+        <app-fields-new [fields]="fields"></app-fields-new>
+      }
+
+    </div>
+    <div class="col-7 col-xl-8">
+
+      <app-fields-list (fields)="getListFields($event)" (field)="getEditField($event)"></app-fields-list>
+    </div>
+  </div>
+</div>

@@ -5,7 +5,6 @@ import {AuthGuard, canActivate, redirectLoggedInTo, redirectUnauthorizedTo} from
 import {roleGuard} from './modules/auth/guards/role.guard';
 import {UnauthorizedComponent} from './shared/components/unauthorized/unauthorized.component';
 
-
 export const routes: Routes = [
   {
     ...canActivate(() => redirectUnauthorizedTo(['auth'])),
@@ -23,7 +22,6 @@ export const routes: Routes = [
   },
   {
     ...canActivate(() => redirectUnauthorizedTo(['auth'])),
-
     path: 'sales',
     loadChildren: () => import('./modules/sales/sales.module').then(m => m.SalesModule),
   },
@@ -31,6 +29,11 @@ export const routes: Routes = [
     ...canActivate(() => redirectUnauthorizedTo(['auth'])),
     path: 'products',
     loadChildren: () => import('./modules/products/products.module').then(m => m.ProductsModule),
+  },
+  {
+    ...canActivate(() => redirectUnauthorizedTo(['auth'])),
+    path: 'fields',
+    loadChildren: () => import('./modules/fields/fields.module').then(m => m.FieldsModule),
   },
   {
     ...canActivate(() => redirectUnauthorizedTo(['auth'])),

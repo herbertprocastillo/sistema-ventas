@@ -1,0 +1,168 @@
+<div class="container-fluid container-xxl mt-2">
+
+  <!-- NAVS AND BUTTONS -->
+  <div class="card shadow rounded border-light-subtle p-3 mb-2">
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+      <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item">
+          <i class="fa-solid fa-house fa-lg" style="cursor: pointer" [routerLink]="'/home'"></i>
+        </li>
+        <li class="breadcrumb-item fs-5" style="cursor: pointer" aria-current="page"
+            [routerLink]="'/warehouse'">
+          ALMACEN
+        </li>
+        <li class="breadcrumb-item fs-5" style="cursor: pointer" aria-current="page" (click)="getTemplate('LIST')">
+          MOVIMIENTOS
+        </li>
+        <li class="breadcrumb-item active fs-5" aria-current="page">
+          NUEVO
+        </li>
+      </ol>
+    </nav>
+  </div>
+
+  <!-- NEW FORM AND LIST PRODUCTS -->
+  <div class="row">
+    <!-- NEW FORM -->
+    <div class="col-4">
+      <div class="card shadow rounded border-light-subtle p-3">
+        <p class="fs-6 fw-bold">NUEVO MOVIMIENTO</p>
+
+        <!-- NEW FORM -->
+        <form [formGroup]="newForm" (ngSubmit)="onSubmit()">
+          <!-- MOVEMENT TYPE -->
+          <div class="form-floating mb-3">
+            <select
+              class="form-select"
+              id="typeSelect"
+              formControlName="type"
+              (change)="onTypeChange()"
+            >
+              <option value="INGRESO" selected>INGRESO</option>
+              <option value="SALIDA">SALIDA</option>
+            </select>
+            <label for="typeSelect"><span class="fw-bold">TIPO DE MOVIMIENTO</span></label>
+          </div>
+
+          <!-- PRODUCT -->
+          <div class="form-floating mb-3">
+            <input
+              type="text"
+              class="form-control"
+              id="productInput"
+              [value]="selectedProductName"
+              required
+            >
+            <label for="productInput"><span class="fw-bold">PRODUCTO: </span></label>
+            <input type="hidden" formControlName="product_id"/>
+          </div>
+
+          <!-- STOCK -->
+          <div class="form-floating mb-3">
+            <input
+              type="number"
+              class="form-control"
+              id="quantityInput"
+              formControlName="quantity"
+              required
+            >
+            <label for="quantityInput"><span class="fw-bold">CANTIDAD: </span></label>
+          </div>
+
+          <!-- PRICE -->
+          <div *ngIf="showPriceInput" class="form-floating mb-3">
+            <input
+              type="number"
+              class="form-control"
+              id="priceInput"
+              formControlName="price"
+            >
+            <label for="priceInput"><span class="fw-bold">PRECIO DE COSTO UNITARIO: </span></label>
+          </div>
+
+          <!-- BUTTON -->
+          <div class="row">
+            <div class="col-6">
+              <button type="reset" class="btn btn-danger w-100" (click)="getCancel(true)">
+                CANCELAR
+              </button>
+            </div>
+            <div class="col-6">
+              <button type="submit" class="btn btn-primary w-100" [disabled]="newForm.invalid">
+                REGISTRAR
+              </button>
+            </div>
+          </div>
+
+        </form>
+      </div>
+    </div>
+
+    <!-- LIST PRODUCTS -->
+    <div class="col-8">
+      <div class="card shadow rounded border-light-subtle p-3">
+        <div>
+          <input
+            type="text"
+            id="searchInput"
+            class="form-control m-0"
+            placeholder="Buscar por nombre, marca o codigo de barras"
+            [formControl]="searchControl"
+          >
+        </div>
+
+        <hr class="text-muted">
+
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+            <tr class="text-nowrap">
+              <th scope="col">#</th>
+              <th scope="col"></th>
+              <th scope="col">PRODUCTO</th>
+              <th scope="col">DESCRIPCIÓN</th>
+              <th scope="col">CATEGORIA</th>
+              <th scope="col">PRECIO DE COSTO</th>
+            </tr>
+            </thead>
+            <tbody>
+              @for (product of (filteredProducts$ | async)| slice:(page - 1) * pageSize: page * pageSize; track i; let i = $index) {
+                <tr class="text-nowrap">
+                  <th scope="row">{{ i + 1 }}</th>
+                  <td>
+                    <!-- BUTTON ADD -->
+                    <button type="button" class="btn btn-success btn-sm" (click)="selectProduct(product)">
+                      <i class="fa-solid fa-right-left"></i>
+                    </button>
+                  </td>
+                  <!-- PRODUCT NAME-->
+                  <td>{{ product.name.toUpperCase() }}</td>
+                  <td>
+                    <!-- PRODUCT DESCRIPTION -->
+                    {{ product.description }}
+                  </td>
+                  <!-- PRODUCT CATEGORY -->
+                  <td>
+                    <app-products-category-by-id [categoryId]="product.category_id"></app-products-category-by-id>
+                  </td>
+                  <td>
+                    <!-- PRODUCT PRICE -->
+                    {{ product.price | number }}
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+          <ngb-pagination [collectionSize]="(listProducts$ | async)?.length || 0" [(page)]="page"
+                          [pageSize]="pageSize"
+                          aria-label="Default pagination"/>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+

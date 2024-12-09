@@ -1,0 +1,102 @@
+<div id="listFields" class="card shadow rounded border-light-subtle p-3">
+
+  <!-- SEARCH FIELD -->
+  <div class="mb-3">
+    <input
+      type="text"
+      class="form-control border-primary-subtle"
+      id="searchInput"
+      [(ngModel)]="searchTerm"
+      placeholder="Buscar campo por nombre."
+    >
+  </div>
+
+  <!-- LIST USERS -->
+  <div class="table-responsive mb-2">
+    <table class="table table-striped text-center">
+      <thead>
+      <tr class="text-nowrap">
+        <th scope="col">#</th>
+        <th scope="col"></th>
+        <th scope="col"></th>
+        <th scope="col">NOMBRE</th>
+        <th scope="col">DESCRIPCIÓN</th>
+        <th scope="col">TIPO</th>
+        <th scope="col">PRECIO HORA</th>
+        <th scope="col">USUARIO REGISTRO</th>
+        <th scope="col">FECHA REGISTRO</th>
+        <th scope="col">USUARIO ACTUALIZACIÓN</th>
+        <th scope="col">FECHA ACTUALIZACIÓN</th>
+      </tr>
+      </thead>
+      <tbody>
+        @for (field of filteredFields() | slice:(page - 1) * pageSize: page * pageSize; track i; let i = $index) {
+          <tr class="text-nowrap">
+            <th scope="row">{{ (page - 1) * pageSize + i + 1 }}</th>
+
+            <!-- BUTTON EDIT -->
+            <td>
+              <button type="button" class="btn btn-primary btn-sm" (click)="getEditField(field)">
+                <i class="fa-solid fa-pen-to-square"></i>
+              </button>
+            </td>
+
+            <!-- BUTTON DELETE & MODAL DELETE -->
+            <td>
+              <button type="button" class="btn btn-danger btn-sm"
+                      (click)="openDeleteModal(deleteModal,field.id)">
+                <i class="fa-regular fa-trash-can"></i>
+              </button>
+              <ng-template #deleteModal let-modal>
+                <div class="modal-header">
+                  <h4 class="modal-title">Confirmación de Eliminación</h4>
+                  <button type="button" class="btn-close" aria-label="Cerrar" (click)="modal.dismiss()"></button>
+                </div>
+                <div class="modal-body">
+                  <p>¿Estás seguro que deseas eliminar el campo <strong>{{ field.name }}</strong>?</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-danger" (click)="modal.close('confirm')">Sí, eliminar
+                  </button>
+                  <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Cancelar</button>
+                </div>
+              </ng-template>
+            </td>
+
+            <!-- NAME -->
+            <td>{{ field.name.toUpperCase() }}</td>
+            <!-- DESCRIPTION -->
+            <td>{{ field.description }}</td>
+            <!-- TYPE -->
+            <td>{{ field.type.toUpperCase() }}</td>
+            <!-- PRICE PER HOUR -->
+            <td>{{ field.pricePerHour | number | currency:'S/. ' }}</td>
+            <!-- USER REGISTER -->
+            <td>
+              <app-users-by-id [userId]="field.createdBy"></app-users-by-id>
+            </td>
+
+            <!-- DATE REGISTER -->
+            <td>{{ field.createdAt.toMillis() | date:'mediumDate' }}</td>
+
+            <!-- USER UPDATED -->
+            <td>
+              <app-users-by-id [userId]="field.updatedBy"></app-users-by-id>
+            </td>
+
+            <!-- DATE UPDATED -->
+            <td>{{ field.updatedAt.toMillis() | date:'mediumDate' }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- PAGINATION -->
+  <div>
+    <ngb-pagination [collectionSize]="(filteredFields()).length || 0" [(page)]="page"
+                    [pageSize]="pageSize"
+                    aria-label="Default pagination"/>
+  </div>
+
+</div>

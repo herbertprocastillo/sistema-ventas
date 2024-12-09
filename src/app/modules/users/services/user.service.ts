@@ -1,18 +1,22 @@
-import {Injectable} from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {Auth, User, updateEmail, updatePassword, deleteUser} from '@angular/fire/auth';
 import {Observable} from 'rxjs';
-import {doc, docData, Firestore} from '@angular/fire/firestore';
+import {collection, collectionData, CollectionReference, doc, docData, Firestore} from '@angular/fire/firestore';
 import {User as AppUser} from '../interfaces/user';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  /** *************************************************************************************************** **/
-  /** Estas funciones se realizan estando autenticados en el mismo usuario que se va modificar o eliminar **/
+  /** INJECTS **/
+  private firestore: Firestore = inject(Firestore);
+  private auth: Auth = inject(Auth);
 
+  /** COLLECTIONS **/
+  private readonly userCollection: CollectionReference = collection(this.firestore, 'users');
 
-  constructor(private auth: Auth, private firestore: Firestore) {
+  getUsers(): Observable<AppUser[]> {
+    return collectionData(this.userCollection, {idField: 'id'}) as Observable<AppUser[]>;
   }
 
   /** ***************************** **/

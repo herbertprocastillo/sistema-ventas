@@ -1,0 +1,88 @@
+<div id="editCustomer" class="card shadow rounded border-light-subtle p-3">
+  <h5 class="fw-medium mb-3">EDITAR CLIENTE</h5>
+
+  <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+
+    <!-- FULL NAME -->
+    <div class="form-floating mb-3">
+      <input
+        type="text"
+        class="form-control"
+        id="fullNameInput"
+        formControlName="fullName"
+        required
+      >
+      <label for="fullNameInput">NOMBRE Y APELLIDOS</label>
+      <div
+        *ngIf="editForm.controls['fullName'].invalid && (editForm.controls['fullName'].dirty)"
+        class="text-danger">
+        Los nombres y apellido son obligatorios.
+      </div>
+    </div>
+
+    <!-- EMAIL -->
+    <div class="form-floating mb-3">
+      <input
+        type="email"
+        class="form-control"
+        id="emailInput"
+        formControlName="email"
+        required
+      >
+      <label for="emailInput">CORREO ELECTRÓNICO</label>
+      <div
+        *ngIf="editForm.controls['email'].invalid && (editForm.controls['email'].dirty)"
+        class="text-danger">
+        El correo electrónico es obligatorio.
+      </div>
+    </div>
+
+    <!-- DNI -->
+    <div class="form-floating mb-3">
+      <input
+        type="text" [maxlength]="8"
+        class="form-control"
+        id="dniInput"
+        formControlName="dni"
+        required
+      >
+      <label for="dniInput">Nº DNI</label>
+      <div
+        *ngIf="editForm.controls['dni'].invalid && (editForm.controls['dni'].dirty)"
+        class="text-danger">
+        El Número de dni es obligatorio.
+      </div>
+    </div>
+
+    <!-- PHONE -->
+    <div class="form-floating mb-3">
+      <input
+        type="text"
+        class="form-control"
+        id="phoneInput"
+        formControlName="phone"
+        required
+      >
+      <label for="phoneInput">TELEFÓNO</label>
+      <div
+        *ngIf="editForm.controls['phone'].invalid && (editForm.controls['phone'].dirty)"
+        class="text-danger">
+        El Telefóno de dni es obligatorio.
+      </div>
+    </div>
+
+    <!-- BUTTON -->
+    <div class="row">
+      <div class="col-6">
+        <button type="reset" class="btn btn-danger w-100" (click)="getCancel(true)">
+          CANCELAR
+        </button>
+      </div>
+      <div class="col-6">
+        <button type="submit" class="btn btn-primary w-100" [disabled]="editForm.invalid">
+          ACTUALIZAR
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

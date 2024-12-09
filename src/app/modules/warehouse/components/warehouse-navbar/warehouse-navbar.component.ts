@@ -40,11 +40,6 @@ export class WarehouseNavbarComponent implements OnInit, OnDestroy {
       });
     }
   }
-
-  async getModule(module: string) {
-    await this.router.navigate([module]);
-  }
-
   async logout() {
     try {
       await this.authService.logout();

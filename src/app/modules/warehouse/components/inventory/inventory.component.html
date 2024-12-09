@@ -1,0 +1,121 @@
+<div class="container-fluid container-xxl mt-2">
+
+  <!-- NAVS AND BUTTONS -->
+  <div class="card shadow rounded border-light-subtle p-3 mb-2">
+    <div class="row">
+      <div class="col-4">
+        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+          <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item">
+              <i class="fa-solid fa-house fa-lg" style="cursor: pointer" [routerLink]="'/home'"></i>
+            </li>
+            <li class="breadcrumb-item fs-5" aria-current="page">
+              ALMACEN
+            </li>
+            <li class="breadcrumb-item active fs-5" aria-current="page">
+              INVENTARIO
+            </li>
+          </ol>
+        </nav>
+      </div>
+      <div class="col-8 d-flex justify-content-end">
+        <!-- BTN MOVEMENT -->
+        <button type="button" class="btn btn-light btn-sm me-2" [routerLink]="'/warehouse/movements'">
+          <i class="fa-solid fa-right-left me-2"></i>
+          MOVIMIENTOS
+        </button>
+
+        <!-- BTN PDF -->
+        <button type="button" class="btn btn-danger me-2">
+          <i class="fa-solid fa-file-pdf"></i>
+        </button>
+
+        <!-- BTN EXCEL -->
+        <button type="button" class="btn btn-success">
+          <i class="fa-solid fa-file-excel"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIST INVENTORY -->
+  <div class="card shadow rounded border-0 p-3">
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <thead>
+        <tr class="text-nowrap text-center">
+          <th scope="col">#</th>
+          <th scope="col"></th>
+          <th scope="col">PRODUCTO</th>
+          <th scope="col">STOCK</th>
+          <th scope="col">PRECIO VENTA</th>
+          <th scope="col">PRECIO COSTO</th>
+          <th scope="col">ULTIMA ACTUALIZACIÓN</th>
+        </tr>
+        </thead>
+        <tbody>
+          @for (inventory of (inventory$ | async) | slice:(page - 1) * pageSize: page * pageSize; track i; let i = $index) {
+            <tr class="text-nowrap text-center">
+              <th scope="row">{{ i + 1 }}</th>
+              <!-- BUTTON EDIT -->
+              <td>
+                <button type="button" class="btn btn-primary btn-sm" (click)="openEditModal(inventory,editModal)">
+                  <i class="fa-solid fa-pen-to-square"></i>
+                </button>
+                <ng-template #editModal let-modal>
+                  <div class="modal-header">
+                    <h5 class="modal-title">Actualizar Precio de Venta</h5>
+                    <button type="button" class="btn-close" aria-label="Close"
+                            (click)="modal.dismiss('Cross click')"></button>
+                  </div>
+                  <div class="modal-body">
+                    <form [formGroup]="editForm">
+                      <div class="form-floating">
+                        <input
+                          type="number"
+                          id="priceSale"
+                          class="form-control"
+                          formControlName="price_sale"
+                          placeholder="Precio Venta"
+                          min="0"
+                        />
+                        <label for="priceSale">Nuevo Precio de Venta</label>
+                      </div>
+                    </form>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cancel')">Cancelar</button>
+                    <button type="button" class="btn btn-primary" (click)="updatePrice(modal)">Actualizar</button>
+                  </div>
+                </ng-template>
+
+              </td>
+              <!-- PRODUCT INFO -->
+              <td>
+                <app-product-info [productId]="inventory.product_id"></app-product-info>
+              </td>
+              <!-- STOCK -->
+              <td>
+                {{ inventory.stock | number }}
+              </td>
+              <!-- PRICE SALE -->
+              <td>
+                {{ inventory.price_sale | currency:'S/.' }}
+              </td>
+              <!-- PRICE COST -->
+              <td>
+                {{ inventory.price_cost | currency:'S/.' }}
+              </td>
+              <!-- DATE UPDATED -->
+              <td>
+                {{ inventory.updatedAt?.toMillis() | date:'mediumDate' }}
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+      <ngb-pagination [collectionSize]="(inventory$ | async)?.length || 0" [(page)]="page" [pageSize]="pageSize"
+                      aria-label="Default pagination"/>
+    </div>
+  </div>
+</div>

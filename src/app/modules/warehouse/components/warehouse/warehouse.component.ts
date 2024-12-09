@@ -1,35 +1,28 @@
 import {Component} from '@angular/core';
 import {WarehouseNavbarComponent} from '../warehouse-navbar/warehouse-navbar.component';
-import {WarehouseEditComponent} from '../warehouse-edit/warehouse-edit.component';
-import {WarehouseNewComponent} from '../warehouse-new/warehouse-new.component';
-import {WarehouseListComponent} from '../warehouse-list/warehouse-list.component';
-import {Warehouse} from '../../interfaces/warehouse';
-import {RouterLink} from '@angular/router';
+import {InventoryComponent} from '../inventory/inventory.component';
+import {Inventory} from '../../interfaces/warehouse';
 
 @Component({
   selector: 'app-warehouse',
   standalone: true,
   imports: [
     WarehouseNavbarComponent,
-    WarehouseEditComponent,
-    WarehouseNewComponent,
-    WarehouseListComponent,
-    RouterLink,
+    InventoryComponent,
   ],
   templateUrl: './warehouse.component.html',
   styleUrl: './warehouse.component.scss'
 })
 export class WarehouseComponent {
-  /** VARIABLES **/
-  public editWarehouse: Warehouse | null = null;
+  public template: string = "LIST";
+  public editInventory: Inventory | null = null;
 
-  getEditWarehouse(warehouse: Warehouse): void {
-    this.editWarehouse = warehouse;
+  getTemplate(template: string) {
+    this.template = template;
   }
 
-  getCancel(cancel: boolean): void {
-    if (cancel) {
-      this.editWarehouse = null;
-    }
+  getEdit(inventory: Inventory) {
+    this.editInventory = inventory;
+    this.getTemplate("EDIT");
   }
 }

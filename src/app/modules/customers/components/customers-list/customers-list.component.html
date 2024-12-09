@@ -1,0 +1,106 @@
+<div id="listCustomer" class="card shadow rounded border-light-subtle p-3">
+
+  <!-- SEARCH FIELD -->
+  <div class="mb-3">
+    <input
+      type="text"
+      class="form-control border-primary-subtle"
+      id="searchInput"
+      [(ngModel)]="searchTerm"
+      placeholder="Buscar cliente por Nombre y Apellido o DNI."
+    >
+  </div>
+
+  <!-- LIST USERS -->
+  <div class="table-responsive mb-2">
+    <table class="table table-striped text-center">
+      <thead>
+      <tr class="text-nowrap">
+        <th scope="col">#</th>
+        <th scope="col"></th>
+        <th scope="col"></th>
+        <th scope="col">NOMBRES Y APELLIDOS</th>
+        <th scope="col">CORREO ELECTRÓNICO</th>
+        <th scope="col">DNI</th>
+        <th scope="col">TELEFÓNO</th>
+        <th scope="col">USUARIO REGISTRO</th>
+        <th scope="col">FECHA REGISTRO</th>
+        <th scope="col">USUARIO ACTUALIZACIÓN</th>
+        <th scope="col">FECHA ACTUALIZACIÓN</th>
+      </tr>
+      </thead>
+      <tbody>
+        @for (customer of filteredCustomers() | slice:(page - 1) * pageSize: page * pageSize; track i; let i = $index) {
+          <tr class="text-nowrap">
+            <th scope="row">{{ (page - 1) * pageSize + i + 1 }}</th>
+
+            <!-- BUTTON EDIT -->
+            <td>
+              <button type="button" class="btn btn-primary btn-sm" (click)="getEditCustomer(customer)">
+                <i class="fa-solid fa-pen-to-square"></i>
+              </button>
+            </td>
+
+            <!-- BUTTON DELETE & MODAL DELETE -->
+            <td>
+              <button type="button" class="btn btn-danger btn-sm"
+                      (click)="openDeleteModal(deleteModal,customer.id)">
+                <i class="fa-regular fa-trash-can"></i>
+              </button>
+              <ng-template #deleteModal let-modal>
+                <div class="modal-header">
+                  <h4 class="modal-title">Confirmación de Eliminación</h4>
+                  <button type="button" class="btn-close" aria-label="Cerrar" (click)="modal.dismiss()"></button>
+                </div>
+                <div class="modal-body">
+                  <p>¿Estás seguro que deseas eliminar el cliente <strong>{{ customer.fullName }}</strong>?</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-danger" (click)="modal.close('confirm')">Sí, eliminar
+                  </button>
+                  <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Cancelar</button>
+                </div>
+              </ng-template>
+            </td>
+
+            <!-- FULL NAME -->
+            <td>{{ customer.fullName }}</td>
+
+            <!-- EMAIL -->
+            <td>{{ customer.email }}</td>
+
+            <!-- DNI -->
+            <td>{{ customer.dni }}</td>
+
+            <!-- PHONE -->
+            <td>{{ customer.phone }}</td>
+
+            <!-- USER REGISTER -->
+            <td>
+              <app-users-by-id [userId]="customer.createdBy"></app-users-by-id>
+            </td>
+
+            <!-- DATE REGISTER -->
+            <td>{{ customer.createdAt.toMillis() | date:'mediumDate' }}</td>
+
+            <!-- USER UPDATED -->
+            <td>
+              <app-users-by-id [userId]="customer.updatedBy"></app-users-by-id>
+            </td>
+
+            <!-- DATE UPDATED -->
+            <td>{{ customer.updatedAt.toMillis() | date:'mediumDate' }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- PAGINATION -->
+  <div>
+    <ngb-pagination [collectionSize]="(filteredCustomers()).length || 0" [(page)]="page"
+                    [pageSize]="pageSize"
+                    aria-label="Default pagination"/>
+  </div>
+
+</div>

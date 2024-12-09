@@ -1,0 +1,61 @@
+<div id="newCustomer" class="card shadow rounded border-light-subtle p-3">
+  <h5 class="fw-medium mb-3">NUEVO CAMPO</h5>
+
+  <form [formGroup]="newForm" (ngSubmit)="onSubmit()">
+
+    <!-- NAME -->
+    <div class="form-floating mb-3">
+      <input type="text" class="form-control" id="nameInput" formControlName="name" required>
+      <label for="nameInput">NOMBRE</label>
+    </div>
+
+    <!-- DESCRIPTION -->
+    <div class="form-floating mb-3">
+      <input type="text" class="form-control" id="descriptionInput" formControlName="description" required>
+      <label for="descriptionInput">DESCRIPTIÓN</label>
+    </div>
+
+    <!-- PRICE HOUR -->
+    <div class="form-floating mb-3">
+      <input type="number" class="form-control" id="pricePerHourInput" formControlName="pricePerHour" required>
+      <label for="pricePerHourInput">PRECIO HORA</label>
+    </div>
+
+    <!-- TYPE -->
+    <div class="form-floating mb-3">
+      <select
+        class="form-select"
+        id="typeSelect"
+        formControlName="type"
+        (change)="onTypeChange()"
+      >
+        <option value="" selected>SELECCIONAR TIPO</option>
+        <option value="INDIVIDUAL">INVIDIDUAL</option>
+        <option value="COMBINADO">COMBINADO</option>
+      </select>
+      <label for="typeSelect">Seleccionar Tipo</label>
+    </div>
+
+    <!-- RELATED FIELDS -->
+    <div *ngIf="newForm.get('type')?.value === 'COMBINADO'" class="form-group mb-3">
+      <label class="mb-2">Seleccionar 2 campos para combinar</label>
+      <div *ngFor="let field of availableFields">
+        <input
+          type="checkbox"
+          [value]="field.id"
+          (change)="onFieldCheckChange($event)"
+          [disabled]="!selectedFields.includes(field.id) && selectedFields.length >= 2"
+        />
+        {{ field.name.toUpperCase() }}
+      </div>
+      <p *ngIf="selectedFields.length === 2" class="text-muted">Ya seleccionaste el máximo de campos permitidos.</p>
+    </div>
+
+
+    <!-- BTN SUBMIT -->
+    <button type="submit" class="btn btn-primary w-100" [disabled]="newForm.invalid">
+      REGISTRAR
+    </button>
+
+  </form>
+</div>

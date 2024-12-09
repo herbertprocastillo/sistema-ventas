@@ -1,39 +1,84 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  EventEmitter,
+  inject,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild
+} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {NgForOf} from '@angular/common';
-import {Product} from '../../../products/interfaces/product';
-import {ProductsService} from '../../../products/services/products.service';
+import {PosSale} from '../../../products/interfaces/product';
+import {WarehouseService} from '../../../warehouse/services/warehouse.service';
+import {Subject, takeUntil} from 'rxjs';
 
 @Component({
   selector: 'app-pos-products',
   standalone: true,
-  imports: [
-    FormsModule,
-    NgForOf
-  ],
+  imports: [FormsModule, NgForOf],
   templateUrl: './pos-products.component.html',
   styleUrl: './pos-products.component.scss'
 })
-export class PosProductsComponent implements OnInit {
-  @Output() addToCart = new EventEmitter<Product>();
-  products: Product[] = [];
-  searchTerm: string = '';
+export class PosProductsComponent implements OnInit, OnDestroy, AfterViewInit {
+  /** IO **/
+  @Output() addToCart = new EventEmitter<PosSale>();
+  @ViewChild('searchInput') searchInput!: ElementRef;
 
-  constructor(private productsService: ProductsService) {}
+  /** INJECTS **/
+  private warehouseService = inject(WarehouseService);
+
+  /** COLLECTIONS **/
+  listProducts: PosSale[] = [];
+
+  /** VARIABLES **/
+  searchTerm: string = '';
+  private destroy$: Subject<void> = new Subject<void>();
 
   ngOnInit(): void {
-    this.productsService.getProducts().subscribe(products => {
-      this.products = products;
-    });
+    this.warehouseService.getInventoryWithProducts()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (combinedProducts: PosSale[]) => {
+          console.log('Combined Products:', combinedProducts);
+          this.listProducts = combinedProducts;
+        },
+        error: (err) => console.error('Error:', err),
+      });
   }
 
-  onAddToCart(product: Product): void {
+  ngAfterViewInit(): void {
+    this.searchInput.nativeElement.focus();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  onSearchInput(): void {
+    const searchTerm: string = this.searchTerm.trim().toLowerCase();
+    const product = this.listProducts.find(
+      (p: PosSale) => p.barCode.toLowerCase() === searchTerm
+    );
+    if (product) {
+      this.onAddToCart(product);
+      this.searchTerm = '';
+      this.searchInput.nativeElement.value = '';
+    }
+  }
+
+  onAddToCart(product: PosSale): void {
     this.addToCart.emit(product);
   }
 
-  filterProducts(): Product[] {
-    return this.products.filter(product =>
-      product.name.toLowerCase().includes(this.searchTerm.toLowerCase())
+  filterProducts(): PosSale[] {
+    const searchTerm: string = this.searchTerm.trim().toLowerCase();
+    return this.listProducts.filter((product: PosSale) =>
+      product.name.toLowerCase().includes(searchTerm) ||
+      product.barCode.toLowerCase().includes(searchTerm),
     );
   }
 }

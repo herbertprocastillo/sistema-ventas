@@ -10,12 +10,13 @@ import {Router} from '@angular/router';
   styleUrl: './home.component.scss'
 })
 export class HomeComponent {
-  /** injects **/
+  /** INJECTS **/
   private router = inject(Router);
-  
-  /** variables **/
+
+  /** VARIABLES **/
   public listModules = [
     {name: "Punto de venta", url: "/pos", icon: "fa-solid fa-cash-register"},
+    {name: "Campos de futbol", url: "/fields", icon: "fa-solid fa-futbol"},
     {name: "Ventas", url: "/sales", icon: "fa-solid fa-chart-line"},
     {name: "Productos", url: "/products", icon: "fa-solid fa-candy-cane"},
     {name: "Almacen", url: "/warehouse", icon: "fa-solid fa-warehouse"},

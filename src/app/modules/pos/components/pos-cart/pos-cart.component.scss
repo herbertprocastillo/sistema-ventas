@@ -1,0 +1,47 @@
+/** IPAD MINI **/
+@media screen and (min-width: 1024px) and (orientation: landscape) {
+  .container-cart {
+    height: 400px;
+  }
+  .list-cart{
+    height: 280px;
+    overflow: auto;
+    overflow-y: scroll;
+  }
+}
+
+/** IPAD AIR **/
+@media screen and (min-width: 1180px) and (orientation: landscape) {
+  .container-cart {
+    height: 450px;
+  }
+  .list-cart{
+    height: 330px;
+    overflow: auto;
+    overflow-y: scroll;
+  }
+}
+
+/** 720p **/
+@media screen and (min-width: 1280px) and (max-width: 1920px) and (orientation: landscape) {
+  .container-cart {
+    height: 380px;
+  }
+  .list-cart{
+    height: 270px;
+    overflow: auto;
+    overflow-y: scroll;
+  }
+}
+
+/** 1080p **/
+@media screen and (min-width: 1920px) and (orientation: landscape) {
+  .container-cart {
+    height: 550px;
+  }
+  .list-cart{
+    height: 430px;
+    overflow: auto;
+    overflow-y: scroll;
+  }
+}

@@ -16,7 +16,6 @@ import {deleteObject, getDownloadURL, getMetadata, ref, Storage, uploadBytes} fr
 import {Observable} from 'rxjs';
 import {Product} from '../interfaces/product';
 import {Auth} from '@angular/fire/auth';
-import {map} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -28,23 +27,18 @@ export class ProductsService {
   private auth = inject(Auth);
 
   /** VARIABLES **/
-  private readonly productsCollection: CollectionReference;
-  private timestamp = Timestamp.now();
-
-  constructor() {
-    this.productsCollection = collection(this.firestore, 'products');
-  }
+  private readonly productsCollection: CollectionReference = collection(this.firestore, 'products');
 
   /** GET ALL PRODUCTS **/
   getProducts(): Observable<Product[]> {
-    const refQuery = query(this.productsCollection, orderBy('name', 'asc'));
-    return collectionData(refQuery, {idField: 'id'}) as Observable<Product[]>;
+    const ref = query(this.productsCollection, orderBy('name', 'asc'));
+    return collectionData(ref, {idField: 'id'}) as Observable<Product[]>;
   }
 
   /** GET PRODUCT BY ID **/
   getProductById(id: string): Observable<Product> {
-    const refDoc = doc(this.firestore, `products/${id}`);
-    return docData(refDoc, {idField: 'id'}) as Observable<Product>;
+    const ref = doc(this.firestore, `products/${id}`);
+    return docData(ref, {idField: 'id'}) as Observable<Product>;
   }
 
   /****************************************
@@ -80,9 +74,9 @@ export class ProductsService {
       if (user) {
         product.name = normalizedName;
         product.createdBy = user.uid;
-        product.createdAt = this.timestamp;
+        product.createdAt = Timestamp.now();
         product.updatedBy = user.uid;
-        product.updatedAt = this.timestamp;
+        product.updatedAt = Timestamp.now();
       }
 
       const docRef = await addDoc(this.productsCollection, product);
@@ -122,7 +116,7 @@ export class ProductsService {
       if (user) {
         product.name = normalizedName;
         product.updatedBy = user.uid;
-        product.updatedAt = this.timestamp;
+        product.updatedAt = Timestamp.now();
       }
 
       if (imageFile) {

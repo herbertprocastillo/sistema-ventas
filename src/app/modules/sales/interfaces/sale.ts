@@ -5,6 +5,8 @@ export interface Sale {
   items: SaleItem[];
   total: number;
   paymentMethod: string;
+  cashReceived?: number;
+  cashChange?: number;
 
   createdBy?: string;
   createdAt?: Timestamp;

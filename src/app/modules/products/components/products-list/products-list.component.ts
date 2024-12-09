@@ -40,7 +40,7 @@ export class ProductsListComponent implements OnInit {
   private modalService = inject(NgbModal);
   private toastService = inject(ToastService);
 
-
+  /** VARIABLES **/
   page: number = 1;
   pageSize: number = 10;
 

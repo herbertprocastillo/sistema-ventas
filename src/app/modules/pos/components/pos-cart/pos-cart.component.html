@@ -1,11 +1,48 @@
-<div class="card shadow rounded border-0 p-3 mb-2 mb-xxl-3">
-  <h3 class="mb-3">Carrito de Compras</h3>
+<div class="card shadow rounded border-light-subtle mb-2 container-cart">
 
-  <ul class="list-group mb-3">
-    <li class="list-group-item" *ngFor="let item of items">
-      {{ item.productName }} - {{ item.quantity }} x S/.{{ item.price }} = S/.{{ item.subtotal }}
-      <button (click)="onRemoveItem(item)" class="btn btn-danger btn-sm float-end">X</button>
-    </li>
-  </ul>
-  <!--<h4>Total: S/.{{ getTotal() }}</h4>-->
+  <h3 class="fw-medium ms-3 mt-3">Carrito de Compras</h3>
+
+  <div class="container">
+
+    <!-- HEADER -->
+    <div class="w-100 p-2 d-inline-flex text-center bg-dark text-white">
+      <div style="width: 40%">
+        <p class="small mb-0">Producto</p>
+      </div>
+      <div style="width: 20%">
+        <p class="small mb-0">Cantidad</p>
+      </div>
+      <div style="width: 15%">
+        <p class="small mb-0">Precio</p>
+      </div>
+      <div style="width: 15%">
+        <p class="small mb-0">Total</p>
+      </div>
+      <div style="width: 10%">
+      </div>
+    </div>
+
+    <!-- LIST ITEMS -->
+    <ul class="list-group list-cart">
+      <li class="list-group-item d-inline-flex text-center pe-0" *ngFor="let item of items">
+        <div style="width: 40%">
+          <p class="small mb-0">{{ item.productName }}</p>
+        </div>
+        <div style="width: 20%">
+          <p class="small mb-0">{{ item.quantity }}</p>
+        </div>
+        <div style="width: 15%">
+          <p class="small mb-0">S/.{{ item.price }}</p>
+        </div>
+        <div style="width: 15%">
+          <p class="small mb-0">S/.{{ item.subtotal }}</p>
+        </div>
+        <div style="width: 10%">
+          <button type="button" class="btn btn-danger btn-sm m-0" (click)="onRemoveItem(item)">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+      </li>
+    </ul>
+  </div>
 </div>
