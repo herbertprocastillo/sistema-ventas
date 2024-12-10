@@ -122,7 +122,6 @@
               <th scope="col">PRODUCTO</th>
               <th scope="col">DESCRIPCIÓN</th>
               <th scope="col">CATEGORIA</th>
-              <th scope="col">PRECIO DE COSTO</th>
             </tr>
             </thead>
             <tbody>
@@ -145,10 +144,7 @@
                   <td>
                     <app-products-category-by-id [categoryId]="product.category_id"></app-products-category-by-id>
                   </td>
-                  <td>
-                    <!-- PRODUCT PRICE -->
-                    {{ product.price | number }}
-                  </td>
+
                 </tr>
               }
             </tbody>
