@@ -54,68 +54,71 @@
         </tr>
         </thead>
         <tbody>
-          @for (inventory of (inventory$ | async) | slice:(page - 1) * pageSize: page * pageSize; track i; let i = $index) {
-            <tr class="text-nowrap text-center">
-              <th scope="row">{{ i + 1 }}</th>
-              <!-- BUTTON EDIT -->
-              <td>
-                <button type="button" class="btn btn-primary btn-sm" (click)="openEditModal(inventory,editModal)">
-                  <i class="fa-solid fa-pen-to-square"></i>
-                </button>
-                <ng-template #editModal let-modal>
-                  <div class="modal-header">
-                    <h5 class="modal-title">Actualizar Precio de Venta</h5>
-                    <button type="button" class="btn-close" aria-label="Close"
-                            (click)="modal.dismiss('Cross click')"></button>
+        <tr class="text-nowrap text-center"
+            *ngFor="let inventory of paginatedList; let i = index">
+          <th scope="row">{{ (page - 1) * pageSize + i + 1 }}</th>
+          <!-- BUTTON EDIT -->
+          <td>
+            <button type="button" class="btn btn-primary btn-sm" (click)="openEditModal(inventory,editModal)">
+              <i class="fa-solid fa-pen-to-square"></i>
+            </button>
+            <ng-template #editModal let-modal>
+              <div class="modal-header">
+                <h5 class="modal-title">Actualizar Precio de Venta</h5>
+                <button type="button" class="btn-close" aria-label="Close"
+                        (click)="modal.dismiss('Cross click')"></button>
+              </div>
+              <div class="modal-body">
+                <form [formGroup]="editForm">
+                  <div class="form-floating">
+                    <input
+                      type="number"
+                      id="priceSale"
+                      class="form-control"
+                      formControlName="price_sale"
+                      placeholder="Precio Venta"
+                      min="0"
+                    />
+                    <label for="priceSale">Nuevo Precio de Venta</label>
                   </div>
-                  <div class="modal-body">
-                    <form [formGroup]="editForm">
-                      <div class="form-floating">
-                        <input
-                          type="number"
-                          id="priceSale"
-                          class="form-control"
-                          formControlName="price_sale"
-                          placeholder="Precio Venta"
-                          min="0"
-                        />
-                        <label for="priceSale">Nuevo Precio de Venta</label>
-                      </div>
-                    </form>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cancel')">Cancelar</button>
-                    <button type="button" class="btn btn-primary" (click)="updatePrice(modal)">Actualizar</button>
-                  </div>
-                </ng-template>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cancel')">Cancelar</button>
+                <button type="button" class="btn btn-primary" (click)="updatePrice(modal)">Actualizar</button>
+              </div>
+            </ng-template>
 
-              </td>
-              <!-- PRODUCT INFO -->
-              <td>
-                <app-product-info [productId]="inventory.product_id"></app-product-info>
-              </td>
-              <!-- STOCK -->
-              <td>
-                {{ inventory.stock | number }}
-              </td>
-              <!-- PRICE SALE -->
-              <td>
-                {{ inventory.price_sale | currency:'S/.' }}
-              </td>
-              <!-- PRICE COST -->
-              <td>
-                {{ inventory.price_cost | currency:'S/.' }}
-              </td>
-              <!-- DATE UPDATED -->
-              <td>
-                {{ inventory.updatedAt?.toMillis() | date:'mediumDate' }}
-              </td>
-            </tr>
-          }
+          </td>
+          <!-- PRODUCT INFO -->
+          <td>
+            <app-product-info [productId]="inventory.product_id"></app-product-info>
+          </td>
+          <!-- STOCK -->
+          <td>
+            {{ inventory.stock | number }}
+          </td>
+          <!-- PRICE SALE -->
+          <td>
+            {{ inventory.price_sale | currency:'S/.' }}
+          </td>
+          <!-- PRICE COST -->
+          <td>
+            {{ inventory.price_cost | currency:'S/.' }}
+          </td>
+          <!-- DATE UPDATED -->
+          <td>
+            {{ inventory.updatedAt?.toMillis() | date:'mediumDate' }}
+          </td>
+        </tr>
         </tbody>
       </table>
-      <ngb-pagination [collectionSize]="(inventory$ | async)?.length || 0" [(page)]="page" [pageSize]="pageSize"
-                      aria-label="Default pagination"/>
+      <ngb-pagination
+        [collectionSize]="listInventories.length"
+        [(page)]="page"
+        [pageSize]="pageSize"
+        aria-label="Default pagination"
+      ></ngb-pagination>
     </div>
   </div>
 </div>

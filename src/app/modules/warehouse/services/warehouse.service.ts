@@ -2,13 +2,17 @@ import {inject, Injectable} from '@angular/core';
 import {
   addDoc,
   collection,
-  collectionData, deleteDoc,
+  collectionData,
+  deleteDoc,
   doc,
   docData,
+  DocumentData,
+  Query,
   Firestore,
   orderBy,
-  query, setDoc,
-  Timestamp, updateDoc
+  limit,
+  query, setDoc, startAfter,
+  Timestamp, updateDoc, CollectionReference
 } from '@angular/fire/firestore';
 import {Auth} from '@angular/fire/auth';
 import {Observable, switchMap} from 'rxjs';
@@ -84,12 +88,10 @@ export class WarehouseService {
     }
   }
 
-  /**********************************************************
-   ********************* INVENTORY **************************
-   **********************************************************/
   /** GET ALL INVENTORY **/
   getInventory(): Observable<Inventory[]> {
-    return collectionData(this.inventoryCollection, {idField: 'id'}) as Observable<Inventory[]>;
+    const ref = query(this.inventoryCollection, orderBy('updatedAt', 'desc'));
+    return collectionData(ref, {idField: 'id'}) as Observable<Inventory[]>;
   }
 
   /** GET PRODUCTS FROM INVENTORY FOR SALE **/

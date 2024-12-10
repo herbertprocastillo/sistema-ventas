@@ -1,10 +1,10 @@
-import {Component, inject} from '@angular/core';
-import {AsyncPipe, CurrencyPipe, DatePipe, DecimalPipe, SlicePipe} from '@angular/common';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {CurrencyPipe, DatePipe, DecimalPipe, NgForOf} from '@angular/common';
 import {NgbModal, NgbPagination} from '@ng-bootstrap/ng-bootstrap';
 import {ProductInfoComponent} from '../../../products/components/product-info/product-info.component';
 import {Inventory} from '../../interfaces/warehouse';
 import {WarehouseService} from '../../services/warehouse.service';
-import {Observable} from 'rxjs';
+import {Subject, takeUntil} from 'rxjs';
 import {RouterLink} from '@angular/router';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {ToastService} from '../../../../shared/toast/services/toast.service';
@@ -13,20 +13,19 @@ import {ToastService} from '../../../../shared/toast/services/toast.service';
   selector: 'app-inventory',
   standalone: true,
   imports: [
-    AsyncPipe,
     CurrencyPipe,
     DatePipe,
     DecimalPipe,
     NgbPagination,
     ProductInfoComponent,
-    SlicePipe,
     RouterLink,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgForOf
   ],
   templateUrl: './inventory.component.html',
   styleUrl: './inventory.component.scss'
 })
-export class InventoryComponent {
+export class InventoryComponent implements OnInit, OnDestroy {
   /** INJECTS **/
   private fb = inject(FormBuilder);
   private warehouseService = inject(WarehouseService);
@@ -34,19 +33,44 @@ export class InventoryComponent {
   private toastService = inject(ToastService);
 
   /** COLLECTIONS **/
-  public inventory$: Observable<Inventory[]> = this.warehouseService.getInventory();
+  public listInventories: Inventory[] = [];
+
+  /** FORM **/
+  public editForm: FormGroup = this.fb.group({
+    price_sale: [0, [Validators.required, Validators.min(0)]],
+  });
+
   /** VARIABLES **/
   public page: number = 1;
   public pageSize: number = 10;
   public selectedInventory: Inventory | null = null;
-  public editForm: FormGroup;
 
-  constructor() {
-    this.editForm = this.fb.group({
-      price_sale: [0, [Validators.required, Validators.min(0)]],
-    });
+  /** SUBSCRIPTION **/
+  private destroy$: Subject<void> = new Subject<void>();
+
+  ngOnInit(): void {
+    this.page = 1;
+    this.pageSize = 10;
+    this.warehouseService.getInventory()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (data: Inventory[]) => {
+          this.listInventories = [...data];
+        },
+        error: (e) => console.log("ERROR: ", e)
+      });
   }
 
+  get paginatedList(): Inventory[] {
+    const start = (this.page - 1) * this.pageSize;
+    const end = this.page * this.pageSize;
+    return this.listInventories.slice(start, end);
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
   /** UPDATE MODAL **/
   openEditModal(inventory: Inventory, modalTemplate: any) {

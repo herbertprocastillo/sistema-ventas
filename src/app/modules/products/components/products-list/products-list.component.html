@@ -4,7 +4,7 @@
   <div class="row">
     <div class="col-4">
       <select id="categorySelect" class="form-select m-0" [formControl]="categoryControl">
-        <option value="TODAS">CATEGORIAS</option> <!-- Valor predeterminado -->
+        <option value="TODAS">CATEGORIAS</option>
         <option *ngFor="let category of listCategories$ | async" [value]="category.id">
           {{ category.name.toUpperCase() }}
         </option>
@@ -32,21 +32,20 @@
             <th scope="col">#</th>
             <th scope="col"></th>
             <th scope="col"></th>
-            <th scope="col">Categoria</th>
-            <th scope="col">Producto</th>
+            <th scope="col">CATEGORIA</th>
+            <th scope="col">PRODUCTO</th>
             <th scope="col"></th>
-            <th scope="col">Descripción</th>
-            <th scope="col">Precio</th>
-            <th scope="col">Registrado por</th>
-            <th scope="col">F. Registro</th>
-            <th scope="col">Actualizado por</th>
-            <th scope="col">F. Actualizacion</th>
+            <th scope="col">DESCRIPCIÓN</th>
+            <th scope="col">USUARIO REGISTRO</th>
+            <th scope="col">FECHA REGISTRO</th>
+            <th scope="col">USUARIO ACTUALIZACIÓN</th>
+            <th scope="col">FECHA ACTUALIZACIÓN</th>
           </tr>
           </thead>
           <tbody>
             @for (product of (filteredProducts$ | async)| slice:(page - 1) * pageSize: page * pageSize; track i; let i = $index) {
               <tr class="text-nowrap">
-                <th scope="row">{{ i + 1 }}</th>
+                <th scope="row">{{ (page - 1) * pageSize + i + 1}}</th>
                 <td>
                   <!-- BUTTON EDIT -->
                   <button type="button" class="btn btn-primary btn-sm" (click)="getEditProduct(product)">
@@ -99,10 +98,6 @@
                 <td>
                   <!-- PRODUCT DESCRIPTION -->
                   {{ product.description }}
-                </td>
-                <td>
-                  <!-- PRODUCT PRICE -->
-                  {{ product.price | number }}
                 </td>
                 <td>
                   <!-- PRODUCT USER REGISTER -->

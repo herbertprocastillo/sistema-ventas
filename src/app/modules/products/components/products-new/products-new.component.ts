@@ -43,7 +43,6 @@ export class ProductsNewComponent {
       category_id: ['', [Validators.required]],
       name: ['', [Validators.required]],
       description: ['', [Validators.required]],
-      price: ['', [Validators.required, Validators.min(1)]],
       barCode: [''],
       imageUrl: [null, [Validators.required]],
     });
