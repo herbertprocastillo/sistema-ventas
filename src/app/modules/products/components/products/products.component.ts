@@ -63,8 +63,8 @@ export class ProductsComponent implements OnInit {
           return {
             ...product,
             categoryName: category ? category.name : 'Sin categoría',
-            createdBy: createdBy ? createdBy.id : 'Sin Usuario',
-            updatedBy: updatedBy ? updatedBy.id : 'Sin Usuario',
+            createdBy: createdBy ? createdBy.displayName : 'Sin Usuario',
+            updatedBy: updatedBy ? updatedBy.displayName : 'Sin Usuario',
           };
         });
 
