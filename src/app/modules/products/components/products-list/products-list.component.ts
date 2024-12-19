@@ -5,7 +5,6 @@ import {NgbModal, NgbPagination} from '@ng-bootstrap/ng-bootstrap';
 import {ToastService} from '../../../../shared/toast/services/toast.service';
 import {AsyncPipe, DatePipe, SlicePipe} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {UsersByIdComponent} from '../../../users/components/users-by-id/users-by-id.component';
 import {ProductsService} from '../../services/products.service';
 
 @Component({
@@ -18,7 +17,6 @@ import {ProductsService} from '../../services/products.service';
     NgbPagination,
     ReactiveFormsModule,
     SlicePipe,
-    UsersByIdComponent,
   ],
   templateUrl: './products-list.component.html',
   styleUrl: './products-list.component.scss'

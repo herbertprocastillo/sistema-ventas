@@ -77,25 +77,17 @@
             <td>{{ product.description }}</td>
 
             <!-- PRODUCT USER REGISTER -->
-            <td>
-              {{ product.createdBy }}
-              <!--<app-users-by-id [userId]="product.createdBy"></app-users-by-id>-->
-            </td>
+            <td>{{ product.createdBy }}</td>
 
             <!-- PRODUCT DATE REGISTER -->
-            <td>
-              {{ product.createdAt.toMillis() | date:'mediumDate' }}
-            </td>
+            <td>{{ product.createdAt.toMillis() | date:'mediumDate' }}</td>
 
             <!-- PRODUCT USER UPDATED -->
-            <td>
-              {{ product.updatedBy }}
-              <!--<app-users-by-id [userId]="product.createdBy"></app-users-by-id> -->
-            </td>
-            <td>
-              <!-- PRODUCT DATE UPDATED -->
-              {{ product.updatedAt.toMillis() | date:'mediumDate' }}
-            </td>
+            <td>{{ product.updatedBy }}</td>
+
+            <!-- PRODUCT DATE UPDATED -->
+            <td>{{ product.updatedAt.toMillis() | date:'mediumDate' }}</td>
+
           </tr>
         }
       </tbody>
