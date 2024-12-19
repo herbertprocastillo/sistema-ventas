@@ -42,7 +42,6 @@ export class PosProductsComponent implements OnInit, OnDestroy, AfterViewInit {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (combinedProducts: PosSale[]) => {
-          console.log('Combined Products:', combinedProducts);
           this.listProducts = combinedProducts;
         },
         error: (err) => console.error('Error:', err),
@@ -59,9 +58,9 @@ export class PosProductsComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onSearchInput(): void {
-    const searchTerm: string = this.searchTerm.trim().toLowerCase();
+    const searchTerm: string = this.searchTerm.trim().toLowerCase() || '';
     const product = this.listProducts.find(
-      (p: PosSale) => p.barCode.toLowerCase() === searchTerm
+      (p: PosSale) => p.barCode?.toLowerCase() === searchTerm
     );
     if (product) {
       this.onAddToCart(product);
@@ -75,10 +74,12 @@ export class PosProductsComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   filterProducts(): PosSale[] {
-    const searchTerm: string = this.searchTerm.trim().toLowerCase();
+    const searchTerm: string = this.searchTerm?.trim().toLowerCase() || '';
+
     return this.listProducts.filter((product: PosSale) =>
-      product.name.toLowerCase().includes(searchTerm) ||
-      product.barCode.toLowerCase().includes(searchTerm),
+      (product.name?.includes(searchTerm) || false) ||
+      (product.description?.includes(searchTerm) || false) ||
+      (product.barCode?.includes(searchTerm) || false)
     );
   }
 }

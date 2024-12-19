@@ -5,8 +5,8 @@ import {NgbModal, NgbPagination} from "@ng-bootstrap/ng-bootstrap";
 import {UsersByIdComponent} from "../../../users/components/users-by-id/users-by-id.component";
 import {Category} from '../../interfaces/product';
 import {Observable} from 'rxjs';
-import {CategoriesService} from '../../services/categories.service';
 import {ToastService} from '../../../../shared/toast/services/toast.service';
+import {ProductsService} from '../../services/products.service';
 
 @Component({
   selector: 'app-products-category-list',
@@ -27,7 +27,7 @@ export class ProductsCategoryListComponent {
   /** IO **/
   @Output() editCategory = new EventEmitter<Category>();
   /** INJECTS **/
-  private categoriesService = inject(CategoriesService);
+  private productsService = inject(ProductsService);
   private toastService = inject(ToastService);
   private modalService = inject(NgbModal);
   /** COLLECTIONS **/
@@ -37,7 +37,7 @@ export class ProductsCategoryListComponent {
   public pageSize: number = 10;
 
   constructor() {
-    this.categories$ = this.categoriesService.getCategories();
+    this.categories$ = this.productsService.getCategories();
   }
 
   /** EDIT CATEGORY **/
@@ -64,13 +64,13 @@ export class ProductsCategoryListComponent {
 
   /** DELETE CATEGORY **/
   async deleteCategory(id: string): Promise<void> {
-    this.categoriesService.isCategoryInUse(id).subscribe(isInUse => {
+    this.productsService.isCategoryInUse(id).subscribe(isInUse => {
       if (isInUse) {
         this.toastService.showError(`ERROR! No se puede eliminar esta categoria porque esta en uso.`);
       } else {
 
         try {
-          this.categoriesService.deleteCategory(id);
+          this.productsService.deleteCategory(id);
           this.toastService.showSuccess("Categoria eliminada exitosamente.");
 
         } catch (e) {

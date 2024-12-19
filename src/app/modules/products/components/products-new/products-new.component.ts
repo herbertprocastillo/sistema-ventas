@@ -5,7 +5,6 @@ import {ToastService} from '../../../../shared/toast/services/toast.service';
 import {Observable} from 'rxjs';
 import {AsyncPipe, NgForOf, NgIf} from '@angular/common';
 import {Category} from '../../interfaces/product';
-import {CategoriesService} from '../../services/categories.service';
 
 @Component({
   selector: 'app-products-new',
@@ -25,7 +24,6 @@ export class ProductsNewComponent {
   @ViewChild('imageInput') imageInput: any;
 
   /** INJECTS **/
-  private categoriesService = inject(CategoriesService);
   private productsService = inject(ProductsService);
   private toastService = inject(ToastService);
   private fb = inject(FormBuilder);
@@ -47,7 +45,7 @@ export class ProductsNewComponent {
       imageUrl: [null, [Validators.required]],
     });
 
-    this.listCategories$ = this.categoriesService.getCategories();
+    this.listCategories$ = this.productsService.getCategories();
   }
 
   /** FILE IMAGE SELECT **/

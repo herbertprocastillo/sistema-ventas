@@ -14,8 +14,9 @@ import {
 } from '@angular/fire/firestore';
 import {deleteObject, getDownloadURL, getMetadata, ref, Storage, uploadBytes} from '@angular/fire/storage';
 import {Observable} from 'rxjs';
-import {Product} from '../interfaces/product';
+import {Category, Product} from '../interfaces/product';
 import {Auth} from '@angular/fire/auth';
+import {map} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -28,6 +29,7 @@ export class ProductsService {
 
   /** VARIABLES **/
   private readonly productsCollection: CollectionReference = collection(this.firestore, 'products');
+  private readonly categoriesCollection: CollectionReference = collection(this.firestore, 'categories');
 
   /** GET ALL PRODUCTS **/
   getProducts(): Observable<Product[]> {
@@ -227,6 +229,120 @@ export class ProductsService {
     } catch (error) {
       console.error('ERROR! al actualizar el producto con la url de la imagen.', error);
       throw error;
+    }
+  }
+
+  /****************************************************************************************************
+   ******************************************** CATEGORIES ********************************************
+   ****************************************************************************************************/
+
+  /** get all categories **/
+  getCategories(): Observable<Category[]> {
+    const q = query(this.categoriesCollection, orderBy('name', 'asc'));
+    return collectionData(q, {idField: 'id'}) as Observable<Category[]>;
+  }
+
+  /** get category by id **/
+  getCategoryById(id: string): Observable<Category> {
+    const ref = doc(this.firestore, `categories/${id}`);
+    return docData(ref, {idField: 'id'}) as Observable<Category>;
+  }
+
+  /** verify if category exists **/
+  async categoryExists(name: string): Promise<boolean> {
+    const q = query(this.categoriesCollection, where('name', '==', name));
+    const querySnapshot = await getDocs(q);
+    return !querySnapshot.empty;
+  }
+
+  /** add new category **/
+  async addCategory(category: Category): Promise<void> {
+    const normalizedName = category.name
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/ñ/g, "n")
+      .replace(/Ñ/g, "N")
+      .replace(/[^a-zA-Z0-9\s]/g, "")
+      .toLowerCase()
+      .trim();
+
+    const exists: boolean = await this.categoryExists(normalizedName);
+
+    if (exists) {
+      throw new Error(`La categoria ${category.name} ya existe`);
+    }
+
+    try {
+      const user = this.auth.currentUser;
+
+      if (user) {
+        category.name = normalizedName;
+        category.createdBy = user.uid;
+        category.createdAt = Timestamp.now();
+        category.updatedBy = user.uid;
+        category.updatedAt = Timestamp.now();
+      }
+
+      await addDoc(this.categoriesCollection, category);
+
+    } catch (e) {
+      console.error('ERROR! al registrar la categoria.', e);
+      throw e;
+    }
+  }
+
+  /** updated category **/
+  async updateCategory(id: string, category: Partial<Category>): Promise<void> {
+    // @ts-ignore
+    const normalizedName = category.name
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/ñ/g, "n")
+      .replace(/Ñ/g, "N")
+      .replace(/[^a-zA-Z0-9\s]/g, "")
+      .toLowerCase()
+      .trim();
+
+    const exists = await this.categoryExists(normalizedName);
+
+    if (exists) {
+      throw new Error(`La categoria ${category.name} ya existe.`);
+    }
+
+    try {
+      const user = this.auth.currentUser;
+
+      if (user) {
+        category.name = normalizedName;
+        category.updatedBy = user.uid;
+        category.updatedAt = Timestamp.now();
+      }
+
+      const ref = doc(this.firestore, `categories/${id}`);
+      await updateDoc(ref, category);
+
+    } catch (e) {
+      console.error('ERROR! al actualizar la categoria.', e);
+      throw e;
+    }
+  }
+
+  /** verify if category is in use **/
+  isCategoryInUse(categoryId: string): Observable<boolean> {
+    const q = query(this.productsCollection, where('category_id', '==', categoryId));
+    return collectionData(q).pipe(
+      map((products: Product[]) => products.length > 0)
+    );
+  }
+
+  /** delete category **/
+  async deleteCategory(id: string): Promise<void> {
+    const ref = doc(this.firestore, `categories/${id}`);
+    try {
+      await deleteDoc(ref);
+    } catch (e) {
+      console.error('ERROR! al borrar la categoria.', e);
+      throw e;
     }
   }
 }

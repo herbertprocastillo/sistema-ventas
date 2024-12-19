@@ -1,45 +1,49 @@
 <div class="container-fluid container-xxl mt-2">
 
-  <!-- NAVS AND BUTTONS -->
-  <div class="card shadow rounded border-light-subtle p-3 mb-2">
-    <div class="row">
-      <div class="col-4">
+  <!-- HEADER -->
+  <div class="card shadow rounded border-light-subtle p-2 p-xxl-3 mb-2">
+    <div style="width: 100%" class="d-flex">
+      <!-- TITLE 25% -->
+      <div style="width: 25%">
         <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
           <ol class="breadcrumb mb-0">
             <li class="breadcrumb-item">
-              <i class="fa-solid fa-house fa-lg" style="cursor: pointer" [routerLink]="'/home'"></i>
-            </li>
-            <li class="breadcrumb-item fs-5" aria-current="page">
-              ALMACEN
+              <i class="fa-solid fa-house fa-lg ms-2 mt-3" style="cursor: pointer" [routerLink]="'/home'"></i>
             </li>
             <li class="breadcrumb-item active fs-5" aria-current="page">
-              INVENTARIO
+              ALMACEN
             </li>
           </ol>
         </nav>
       </div>
-      <div class="col-8 d-flex justify-content-end">
+      <!-- SEARCH AND BUTTONS 75% -->
+      <div style="width: 75%" class="d-flex justify-content-end">
+        <!-- INPUT SEARCH -->
+        <div class="me-2" style="width: 50%">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Buscar producto por nombre o código de barras."
+          >
+        </div>
+
         <!-- BTN MOVEMENT -->
-        <button type="button" class="btn btn-light btn-sm me-2" [routerLink]="'/warehouse/movements'">
-          <i class="fa-solid fa-right-left me-2"></i>
+        <button type="button" class="btn btn-outline-primary btn-sm me-2" [routerLink]="'/warehouse/movements'">
+          <i class="fa-solid fa-right-left"></i>
           MOVIMIENTOS
         </button>
 
-        <!-- BTN PDF -->
-        <button type="button" class="btn btn-danger me-2">
-          <i class="fa-solid fa-file-pdf"></i>
-        </button>
-
         <!-- BTN EXCEL -->
-        <button type="button" class="btn btn-success">
+        <button type="button" class="btn btn-success btn-sm">
           <i class="fa-solid fa-file-excel"></i>
+          EXPORT
         </button>
       </div>
     </div>
   </div>
 
-  <!-- LIST INVENTORY -->
-  <div class="card shadow rounded border-0 p-3">
+  <!-- LIST INVENTORIES -->
+  <div class="card shadow rounded border-0 p-2">
     <div class="table-responsive">
       <table class="table table-bordered">
         <thead>

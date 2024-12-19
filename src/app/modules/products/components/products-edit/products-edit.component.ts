@@ -1,9 +1,8 @@
-import {Component, EventEmitter, inject, Input, OnInit, Output, output} from '@angular/core';
+import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
 import {Category, Product} from '../../interfaces/product';
-import {FormBuilder, FormGroup, NgForm, ReactiveFormsModule, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {ProductsService} from '../../services/products.service';
 import {ToastService} from '../../../../shared/toast/services/toast.service';
-import {CategoriesService} from '../../services/categories.service';
 import {Observable} from 'rxjs';
 import {AsyncPipe, NgForOf, NgIf} from '@angular/common';
 
@@ -25,7 +24,6 @@ export class ProductsEditComponent implements OnInit {
   @Output() editCancel = new EventEmitter<boolean>();
 
   /** INJECTS **/
-  private categoriesService = inject(CategoriesService);
   private productsService = inject(ProductsService);
   private toastService = inject(ToastService);
   private fb = inject(FormBuilder);
@@ -48,7 +46,7 @@ export class ProductsEditComponent implements OnInit {
       imageUrl: [null, [Validators.required]],
     });
 
-    this.listCategories$ = this.categoriesService.getCategories();
+    this.listCategories$ = this.productsService.getCategories();
   }
 
   ngOnInit(): void {

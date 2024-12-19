@@ -6,20 +6,19 @@ import {ProductsService} from '../../../../products/services/products.service';
 import {Product} from '../../../../products/interfaces/product';
 import {RouterLink} from '@angular/router';
 import {combineLatest, Observable, startWith} from 'rxjs';
-import {AsyncPipe, DecimalPipe, NgIf, SlicePipe} from '@angular/common';
+import {AsyncPipe, NgIf, SlicePipe} from '@angular/common';
 import {
   ProductsCategoryByIdComponent
 } from '../../../../products/components/products-category-by-id/products-category-by-id.component';
 import {map} from 'rxjs/operators';
 import {NgbPagination} from '@ng-bootstrap/ng-bootstrap';
-import {Inventory, Movement} from '../../../interfaces/warehouse';
 import {doc, Firestore, getDoc} from '@angular/fire/firestore';
-import {Auth} from '@angular/fire/auth';
+
 
 @Component({
   selector: 'app-movements-new',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, RouterLink, AsyncPipe, DecimalPipe, ProductsCategoryByIdComponent, SlicePipe, NgbPagination, NgIf,],
+  imports: [FormsModule, ReactiveFormsModule, RouterLink, AsyncPipe, ProductsCategoryByIdComponent, SlicePipe, NgbPagination, NgIf],
   templateUrl: './movements-new.component.html',
   styleUrl: './movements-new.component.scss'
 })
@@ -54,7 +53,7 @@ export class MovementsNewComponent implements OnInit {
       product_id: ['', [Validators.required]],
       type: ['INGRESO', [Validators.required]],
       quantity: [0, [Validators.required, Validators.min(1)]],
-      price: [0],
+      price_cost: [0],
     });
 
     this.listProducts$ = this.productService.getProducts();
@@ -111,7 +110,7 @@ export class MovementsNewComponent implements OnInit {
       const movement = this.newForm.value;
       try {
         await this.warehouseService.addMovement(movement);
-        await this.updateInventory(movement.product_id, movement.type, movement.quantity, movement.price);
+        await this.updateInventory(movement.product_id, movement.type, movement.quantity, movement.price_cost);
         this.toastService.showSuccess("Movimiento registrado con EXITO");
         this.newForm.reset();
         this.template.emit("LIST");
@@ -126,7 +125,7 @@ export class MovementsNewComponent implements OnInit {
     }
   }
 
-  private async updateInventory(productId: string, type: 'INGRESO' | 'SALIDA', quantity: number, price: number) {
+  private async updateInventory(productId: string, type: 'INGRESO' | 'SALIDA', quantity: number, price_cost: number) {
     const inventoryRef = doc(this.firestore, `warehouseInventory/${productId}`);
     const inventorySnapshot = await getDoc(inventoryRef);
     const inventoryData = inventorySnapshot.data() as any;
@@ -135,11 +134,11 @@ export class MovementsNewComponent implements OnInit {
       if (type === 'SALIDA') {
         throw new Error("No puedes realizar un movimiento sin stock.");
       }
-      await this.warehouseService.addInventory(productId, quantity, price);
+      await this.warehouseService.addInventory(productId, quantity, price_cost);
     } else {
 
-      await this.warehouseService.updateInventory(productId, type, quantity, price, inventoryData);
+      await this.warehouseService.updateMovementInventory(productId, type, quantity, price_cost, inventoryData);
     }
-
   }
+
 }

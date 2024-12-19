@@ -1,7 +1,7 @@
 import {Component, inject} from '@angular/core';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {CategoriesService} from '../../services/categories.service';
 import {ToastService} from '../../../../shared/toast/services/toast.service';
+import {ProductsService} from '../../services/products.service';
 
 @Component({
   selector: 'app-products-category-new',
@@ -12,24 +12,21 @@ import {ToastService} from '../../../../shared/toast/services/toast.service';
 })
 export class ProductsCategoryNewComponent {
   /** INJECTS **/
-  private categoriesService = inject(CategoriesService);
+  private productsService = inject(ProductsService);
   private toastService = inject(ToastService);
   private fb = inject(FormBuilder);
-  /** VARIABLES **/
-  public newForm: FormGroup;
 
-  constructor() {
-    this.newForm = this.fb.group({
-      name: ['', [Validators.required]],
-    });
-  }
+  /** VARIABLES **/
+  public newForm: FormGroup = this.fb.group({
+    name: ['', [Validators.required]],
+  });
 
   async onSubmit(): Promise<void> {
     if (this.newForm.valid) {
       const category = this.newForm.value;
 
       try {
-        await this.categoriesService.addCategory(category);
+        await this.productsService.addCategory(category);
         this.toastService.showSuccess('Categoria registrada con EXITO!');
         this.newForm.reset();
 

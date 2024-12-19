@@ -6,13 +6,10 @@ import {
   deleteDoc,
   doc,
   docData,
-  DocumentData,
-  Query,
   Firestore,
   orderBy,
-  limit,
-  query, setDoc, startAfter,
-  Timestamp, updateDoc, CollectionReference
+  query, setDoc,
+  Timestamp, updateDoc
 } from '@angular/fire/firestore';
 import {Auth} from '@angular/fire/auth';
 import {Observable, switchMap} from 'rxjs';
@@ -97,27 +94,31 @@ export class WarehouseService {
   /** GET PRODUCTS FROM INVENTORY FOR SALE **/
   getInventoryWithProducts(): Observable<any[]> {
     return collectionData(this.inventoryCollection, {idField: 'id'}).pipe(
-      switchMap((inventory: Inventory[]) => {
+      switchMap((inventory: any[]) => {
         const inventoryMap = new Map(
           inventory.map((inv: any) => [inv.product_id, inv])
         );
 
         return collectionData(this.productsCollection, {idField: 'id'}).pipe(
-          map((products: any[]) => {
-            return products
-              .filter((product) => {
-                const hasInventory = inventoryMap.has(product.id);
-                if (!hasInventory) {
-                  //console.warn(`No inventory found for product ID: ${product.id}`);
-                }
-                return hasInventory;
-              })
-              .map((product) => {
+          map((products: any[]) =>
+            products
+              .filter((product: any) => {
                 const inventory = inventoryMap.get(product.id);
+
                 if (!inventory) {
-                  console.warn(`Inventory data is undefined for product ID: ${product.id}`);
-                  return null;
+                  console.warn(`No inventory found for product ID: ${product.id}`);
+                  return false; // Excluir si no hay inventario
                 }
+
+                if (inventory.stock <= 0) {
+                  console.warn(`Product ID: ${product.id} has no stock available`);
+                  return false; // Excluir si el stock es <= 0
+                }
+
+                return true; // Incluir si tiene inventario y stock > 0
+              })
+              .map((product: any) => {
+                const inventory = inventoryMap.get(product.id);
                 return {
                   id: product.id,
                   name: product.name,
@@ -127,17 +128,13 @@ export class WarehouseService {
                   price_sale: inventory.price_sale,
                   stock: inventory.stock,
                 };
-              })
-              .filter((result) => result !== null);
-          })
-        );
+              })));
       })
     );
   }
 
-
   /** ADD NEW INVENTORY **/
-  async addInventory(productId: string, quantity: number, price: number): Promise<void> {
+  async addInventory(productId: string, quantity: number, price_cost: number): Promise<void> {
     const inventoryRef = doc(this.firestore, `warehouseInventory/${productId}`);
     const newInventory = {} as Inventory;
     const user = this.auth.currentUser;
@@ -145,7 +142,7 @@ export class WarehouseService {
     if (user) {
       newInventory.product_id = productId;
       newInventory.stock = quantity;
-      newInventory.price_cost = price;
+      newInventory.price_cost = price_cost;
       newInventory.price_sale = 0;
       newInventory.createdBy = user.uid;
       newInventory.createdAt = Timestamp.now();
@@ -161,7 +158,7 @@ export class WarehouseService {
   }
 
   /** UPDATE INVENTORY **/
-  async updateInventory(productId: string, type: 'INGRESO' | 'SALIDA', quantity: number, price: number, inventoryData: any): Promise<void> {
+  async updateMovementInventory(productId: string, type: 'INGRESO' | 'SALIDA', quantity: number, price_cost: number, inventoryData: any): Promise<void> {
     let newStock = inventoryData.stock;
     if (type === 'INGRESO') {
       newStock += quantity;
@@ -176,7 +173,7 @@ export class WarehouseService {
     const user = this.auth.currentUser;
     if (user) {
       newInventory.stock = newStock;
-      newInventory.price_cost = price;
+      newInventory.price_cost = price_cost;
       newInventory.price_sale = inventoryData.price_sale;
       newInventory.updatedBy = user.uid;
       newInventory.updatedAt = Timestamp.now();
@@ -189,13 +186,13 @@ export class WarehouseService {
   }
 
   /** UPDATE SALE PRICE **/
-  async updateSalePrice(id: string, price: number): Promise<void> {
+  async updateSalePrice(id: string, price_sale: number): Promise<void> {
     const inventoryRef = doc(this.firestore, `warehouseInventory/${id}`);
     const newInventory = {} as Inventory;
 
     const user = this.auth.currentUser;
     if (user) {
-      newInventory.price_sale = price;
+      newInventory.price_sale = price_sale;
       newInventory.updatedBy = user.uid;
       newInventory.updatedAt = Timestamp.now();
     }
@@ -207,4 +204,9 @@ export class WarehouseService {
     }
   }
 
+  /** UPDATE STOCK **/
+  async updateInventoryStock(productId: string, newStock: number): Promise<void> {
+    const ref = doc(this.firestore, `warehouseInventory/${productId}`);
+    await updateDoc(ref, {stock: newStock});
+  }
 }

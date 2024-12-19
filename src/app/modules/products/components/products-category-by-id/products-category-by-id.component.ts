@@ -3,7 +3,6 @@ import {Observable} from 'rxjs';
 import {Category} from '../../interfaces/product';
 import {ProductsService} from '../../services/products.service';
 import {AsyncPipe, NgIf} from '@angular/common';
-import {CategoriesService} from '../../services/categories.service';
 
 @Component({
   selector: 'app-products-category-by-id',
@@ -18,14 +17,13 @@ export class ProductsCategoryByIdComponent implements OnInit {
 
   /** injects **/
   private productService = inject(ProductsService);
-  private categoriesService = inject(CategoriesService);
 
   /** variables **/
   category$: Observable<Category> | undefined;
 
   ngOnInit(): void {
     if (this.categoryId) {
-      this.category$ = this.categoriesService.getCategoryById(this.categoryId);
+      this.category$ = this.productService.getCategoryById(this.categoryId);
     }
   }
 }

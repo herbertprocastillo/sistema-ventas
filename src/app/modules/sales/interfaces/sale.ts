@@ -15,6 +15,7 @@ export interface Sale {
 export interface SaleItem {
   productId: string;
   productName: string;
+  availableStock: number;
   quantity: number;
   price: number;
   subtotal: number;

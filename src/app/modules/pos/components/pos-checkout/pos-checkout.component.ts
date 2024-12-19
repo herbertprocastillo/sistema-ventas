@@ -64,7 +64,6 @@ export class PosCheckoutComponent {
       sale.cashChange = this.cashChange ?? 0;
     }
 
-
     try {
       await this.salesService.addSale(sale);
       this.cashReceived = null;

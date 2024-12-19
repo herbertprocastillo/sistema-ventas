@@ -1,0 +1,27 @@
+/** IPAD MINI **/
+@media screen and (min-width: 1024px) and (orientation: landscape) {
+  #listFields {
+    height: 600px;
+  }
+}
+
+/** IPAD AIR **/
+@media screen and (min-width: 1180px) and (orientation: landscape) {
+  #listFields {
+    height: 650px;
+  }
+}
+
+/** 720p **/
+@media screen and (min-width: 1280px) and (max-width: 1920px) and (orientation: landscape) {
+  #listFields {
+    height: 600px;
+  }
+}
+
+/** 1080p **/
+@media screen and (min-width: 1920px) and (orientation: landscape) {
+  #listFields {
+    height: 750px;
+  }
+}

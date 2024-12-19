@@ -2,8 +2,8 @@ import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/c
 import {Category} from '../../interfaces/product';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {ToastService} from '../../../../shared/toast/services/toast.service';
-import {CategoriesService} from '../../services/categories.service';
 import {NgIf} from '@angular/common';
+import {ProductsService} from '../../services/products.service';
 
 @Component({
   selector: 'app-products-category-edit',
@@ -23,7 +23,7 @@ export class ProductsCategoryEditComponent implements OnInit {
 
   /** INJECTS **/
   private fb = inject(FormBuilder);
-  private categoryService = inject(CategoriesService);
+  private productsService = inject(ProductsService);
   private toastService = inject(ToastService);
 
   /** VARIABLES **/
@@ -50,7 +50,7 @@ export class ProductsCategoryEditComponent implements OnInit {
       const category = {...this.category, ...this.editForm.value};
 
       try {
-        await this.categoryService.updateCategory(category.id, category);
+        await this.productsService.updateCategory(category.id, category);
         this.toastService.showSuccess("Categoria actualizada con EXITO!.");
         this.editForm.reset();
         this.getCancel(true);
