@@ -1,4 +1,4 @@
-<div class="card shadow rounded border-light-subtle mb-2 container-cart">
+<div id="cart" class="card shadow rounded border-light-subtle mb-2">
 
   <h3 class="fw-medium ms-3 mt-3">Carrito de Compras</h3>
 
@@ -23,7 +23,7 @@
     </div>
 
     <!-- LIST ITEMS -->
-    <ul class="list-group list-cart">
+    <ul class="list-group">
       <li class="list-group-item d-inline-flex text-center pe-0" *ngFor="let item of items">
         <div style="width: 40%">
           <p class="small mb-0">{{ item.productName }}</p>

@@ -24,7 +24,7 @@ export class ProductsNavbarComponent implements OnInit, OnDestroy {
 
   /** variables **/
   public collapsed: boolean = true;
-  public displayName: string | null = null;
+  public displayName: string ='';
   private userSubscription: Subscription | null = null;
 
   ngOnInit(): void {

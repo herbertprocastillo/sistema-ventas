@@ -1,11 +1,11 @@
 import {Component, EventEmitter, inject, Input, Output} from '@angular/core';
 import {Observable} from 'rxjs';
-import {Product} from '../../interfaces/product';
+import {Product} from '../../../interfaces/product';
 import {NgbModal, NgbPagination} from '@ng-bootstrap/ng-bootstrap';
-import {ToastService} from '../../../../shared/toast/services/toast.service';
+import {ToastService} from '../../../../../shared/toast/services/toast.service';
 import {AsyncPipe, DatePipe, SlicePipe} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {ProductsService} from '../../services/products.service';
+import {ProductsService} from '../../../services/products.service';
 
 @Component({
   selector: 'app-products-list',

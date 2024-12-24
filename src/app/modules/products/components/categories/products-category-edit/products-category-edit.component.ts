@@ -1,9 +1,9 @@
 import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
-import {Category} from '../../interfaces/product';
+import {Category} from '../../../interfaces/product';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {ToastService} from '../../../../shared/toast/services/toast.service';
+import {ToastService} from '../../../../../shared/toast/services/toast.service';
 import {NgIf} from '@angular/common';
-import {ProductsService} from '../../services/products.service';
+import {ProductsService} from '../../../services/products.service';
 
 @Component({
   selector: 'app-products-category-edit',

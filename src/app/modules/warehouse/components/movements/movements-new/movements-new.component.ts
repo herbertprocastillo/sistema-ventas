@@ -9,7 +9,7 @@ import {combineLatest, Observable, startWith} from 'rxjs';
 import {AsyncPipe, NgIf, SlicePipe} from '@angular/common';
 import {
   ProductsCategoryByIdComponent
-} from '../../../../products/components/products-category-by-id/products-category-by-id.component';
+} from '../../../../products/components/categories/products-category-by-id/products-category-by-id.component';
 import {map} from 'rxjs/operators';
 import {NgbPagination} from '@ng-bootstrap/ng-bootstrap';
 import {doc, Firestore, getDoc} from '@angular/fire/firestore';

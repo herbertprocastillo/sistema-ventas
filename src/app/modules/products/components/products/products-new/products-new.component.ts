@@ -1,10 +1,10 @@
 import {Component, inject, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
-import {ProductsService} from '../../services/products.service';
-import {ToastService} from '../../../../shared/toast/services/toast.service';
+import {ProductsService} from '../../../services/products.service';
+import {ToastService} from '../../../../../shared/toast/services/toast.service';
 import {Observable} from 'rxjs';
 import {AsyncPipe, NgForOf, NgIf} from '@angular/common';
-import {Category} from '../../interfaces/product';
+import {Category} from '../../../interfaces/product';
 
 @Component({
   selector: 'app-products-new',

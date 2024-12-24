@@ -54,7 +54,7 @@
             <td>{{ product.name.toUpperCase() }}</td>
 
             <!-- PRODUCT CATEGORY -->
-            <td>{{ product.categoryName }}</td>
+            <td>{{ product.category_name }}</td>
 
             <!-- PRODUCT IMAGE AND MODAL PREVIEW -->
             <td>
@@ -93,8 +93,10 @@
       </tbody>
     </table>
   </div>
-
-  <ngb-pagination [collectionSize]="(filteredProducts$ | async)?.length || 0" [(page)]="page"
-                  [pageSize]="pageSize"
-                  aria-label="Default pagination"/>
+  <ngb-pagination
+    [collectionSize]="(filteredProducts$ | async)?.length || 0"
+    [(page)]="page"
+    [pageSize]="pageSize"
+    aria-label="Default pagination"
+  ></ngb-pagination>
 </div>

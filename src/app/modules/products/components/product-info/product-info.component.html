@@ -1,9 +1,0 @@
-<ng-container *ngIf="product$ | async as product; else noData">
-
-  <div class="d-inline-flex">
-    <img class="me-3" src="{{product.imageUrl}}" style="height: 30px" alt="">
-    <p>{{product.name}} -- {{product.description}}</p>
-  </div>
-</ng-container>
-
-<ng-template #noData></ng-template>

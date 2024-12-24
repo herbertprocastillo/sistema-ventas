@@ -1,7 +1,7 @@
 import {Component, inject, Input, OnInit} from '@angular/core';
 import {Observable} from 'rxjs';
-import {Category} from '../../interfaces/product';
-import {ProductsService} from '../../services/products.service';
+import {Category} from '../../../interfaces/product';
+import {ProductsService} from '../../../services/products.service';
 import {AsyncPipe, NgIf} from '@angular/common';
 
 @Component({

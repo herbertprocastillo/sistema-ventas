@@ -2,7 +2,7 @@ import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {NgbDropdown, NgbDropdownItem, NgbDropdownMenu, NgbDropdownToggle} from '@ng-bootstrap/ng-bootstrap';
 import {Router, RouterLink} from '@angular/router';
 import {AuthService} from '../../../modules/auth/services/auth.service';
-import {Subscription} from 'rxjs';
+import {Subject, takeUntil} from 'rxjs';
 
 @Component({
   selector: 'app-navbar',
@@ -18,27 +18,33 @@ import {Subscription} from 'rxjs';
   styleUrl: './navbar.component.scss'
 })
 export class NavbarComponent implements OnInit, OnDestroy {
-  /** injects **/
+  /** INJECTS **/
   public router = inject(Router);
   public authService = inject(AuthService);
 
-  /** variables **/
+  /** VARIABLES **/
   public collapsed: boolean = true;
   public displayName: string | null = null;
-  private userSubscription: Subscription | null = null;
+  private destroy$: Subject<void> = new Subject<void>();
 
   ngOnInit(): void {
     const userData$ = this.authService.getCurrentUserDataFirestore();
     if (userData$) {
-      userData$.subscribe({
-        next: (userData) => {
-          this.displayName = userData?.displayName || 'Usuario';
-        },
-        error: (e) => {
-          console.error('error al obtener los datos del usuario', e);
-        }
-      });
+      userData$.pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (userData) => {
+            this.displayName = userData?.displayName || 'Usuario';
+          },
+          error: (e) => {
+            console.error('error al obtener los datos del usuario', e);
+          }
+        });
     }
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   async logout() {
@@ -48,12 +54,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
     } catch (e) {
       console.error('ERROR! al cerrar sesión.', e);
-    }
-  }
-
-  ngOnDestroy(): void {
-    if (this.userSubscription) {
-      this.userSubscription.unsubscribe();
     }
   }
 }

@@ -2,12 +2,13 @@ import {Timestamp} from '@angular/fire/firestore';
 
 export interface Product {
   id: string;
-  category_id: string;
-  categoryName?: string; // Campo opcional para el nombre de la categoría
   name: string;
   description: string;
   imageUrl: string;
   barCode: string;
+
+  category_id: string;
+  category_name?: string;
 
   createdBy: string;
   createdAt: Timestamp;

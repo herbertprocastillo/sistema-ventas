@@ -1,10 +1,10 @@
 /** IPAD MINI **/
 @media screen and (min-width: 1024px) and (orientation: landscape) {
-  .container-cart {
-    height: 400px;
+  #cart {
+    height: 420px;
   }
-  .list-cart{
-    height: 280px;
+  #cart ul {
+    height: 310px;
     overflow: auto;
     overflow-y: scroll;
   }
@@ -12,11 +12,11 @@
 
 /** IPAD AIR **/
 @media screen and (min-width: 1180px) and (orientation: landscape) {
-  .container-cart {
-    height: 450px;
+  #cart {
+    height: 460px;
   }
-  .list-cart{
-    height: 330px;
+  #cart ul{
+    height: 340px;
     overflow: auto;
     overflow-y: scroll;
   }
@@ -24,11 +24,11 @@
 
 /** 720p **/
 @media screen and (min-width: 1280px) and (max-width: 1920px) and (orientation: landscape) {
-  .container-cart {
-    height: 380px;
+  #cart {
+    height: 400px;
   }
-  .list-cart{
-    height: 270px;
+  #cart ul {
+    height: 280px;
     overflow: auto;
     overflow-y: scroll;
   }
@@ -36,11 +36,11 @@
 
 /** 1080p **/
 @media screen and (min-width: 1920px) and (orientation: landscape) {
-  .container-cart {
-    height: 550px;
+  #cart {
+    height: 520px;
   }
-  .list-cart{
-    height: 430px;
+  #cart ul {
+    height: 400px;
     overflow: auto;
     overflow-y: scroll;
   }

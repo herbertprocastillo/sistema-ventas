@@ -1,7 +1,7 @@
 import {Component, inject} from '@angular/core';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {ToastService} from '../../../../shared/toast/services/toast.service';
-import {ProductsService} from '../../services/products.service';
+import {ToastService} from '../../../../../shared/toast/services/toast.service';
+import {ProductsService} from '../../../services/products.service';
 
 @Component({
   selector: 'app-products-category-new',

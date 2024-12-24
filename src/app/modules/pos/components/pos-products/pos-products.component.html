@@ -1,10 +1,11 @@
 <div class="card shadow rounded border-light-subtle p-3">
 
+  <!-- HEADER -->
   <div class="row mb-3">
-    <div class="col-4">
+    <div class="col-4 col-xl-6">
       <h3 class="fw-medium">Productos</h3>
     </div>
-    <div class="col-8">
+    <div class="col-8 col-xl-6">
       <!-- SEARCH INPUT PRODUCTS -->
       <input
         type="text"
@@ -12,28 +13,30 @@
         id="floatingInput"
         [(ngModel)]="searchTerm"
         (input)="onSearchInput()"
-        placeholder="Buscar por nombre o escanee el código de barras"
+        placeholder="Buscar por nombre o código de barras"
         #searchInput
       >
     </div>
   </div>
 
-
-  <div class="container list-products">
+  <!-- LIST PRODUCTS -->
+  <div id="list-products" class="container">
     <div class="row">
       <div class="col-4 col-xl-3 mb-3" *ngFor="let product of filterProducts()">
-        <div class="card shadow border-light-subtle rounded p-1 mb-3 text-center" (click)="onAddToCart(product)"
-             style="cursor: pointer">
+
+        <!-- PRODUCT ITEM -->
+        <div class="card product-item shadow border-light-subtle rounded p-1 mb-3 text-center"
+             (click)="onAddToCart(product)">
           <img
             class="img-fluid m-auto"
             src="{{product.imageUrl}}"
             alt=""
           >
           <p class="fw-medium mb-1 text-uppercase">{{ product.name }}</p>
-          <p class="text-muted small">{{ product.description }}</p>
+          <p class="text-muted small text-lowercase">{{ product.description }}</p>
         </div>
+
       </div>
     </div>
   </div>
-
 </div>

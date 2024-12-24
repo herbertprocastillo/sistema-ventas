@@ -185,22 +185,25 @@ export class WarehouseService {
     }
   }
 
-  /** UPDATE SALE PRICE **/
-  async updateSalePrice(id: string, price_sale: number): Promise<void> {
-    const inventoryRef = doc(this.firestore, `warehouseInventory/${id}`);
-    const newInventory = {} as Inventory;
+  /** UPDATE INVENTORY **/
+  async updateInventory(id: string, price_sale: number, stock: number): Promise<void> {
+    const ref = doc(this.firestore, `warehouseInventory/${id}`);
+    const updateInventory = {} as Inventory;
 
     const user = this.auth.currentUser;
+
     if (user) {
-      newInventory.price_sale = price_sale;
-      newInventory.updatedBy = user.uid;
-      newInventory.updatedAt = Timestamp.now();
+      updateInventory.price_sale = price_sale;
+      updateInventory.stock = stock;
+      updateInventory.updatedBy = user.uid;
+      updateInventory.updatedAt = Timestamp.now();
     }
 
     try {
-      await updateDoc(inventoryRef, {...newInventory});
+      await updateDoc(ref, {...updateInventory});
+
     } catch (e) {
-      console.error("Error! al actualizar el precio de venta. ", e);
+      console.error("ERROR! Al actualizar el inventario. ", e);
     }
   }
 

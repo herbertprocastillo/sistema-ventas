@@ -106,11 +106,13 @@ export class ProductsService {
       .toLowerCase()
       .trim();
 
+/*
     const exists: boolean = await this.productExists(normalizedName);
+*/
 
-    if (exists) {
+    /*if (exists) {
       throw new Error(`El producto ${product.name} ya existe`);
-    }
+    }*/
 
     try {
       const user = this.auth.currentUser;

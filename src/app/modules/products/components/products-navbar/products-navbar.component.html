@@ -15,12 +15,6 @@
     <div class="navbar-collapse" [class.collapse]="collapsed" id="navbarContent">
       <ul class="navbar-nav ms-auto">
 
-        <li class="nav-item" display="dynamic">
-          <a class="nav-link" tabindex="0" role="button" (click)="getModule('products/categories')">
-            CATEGORIAS
-          </a>
-        </li>
-
         <li class="nav-item" ngbDropdown display="dynamic" placement="bottom-end">
           <a class="nav-link" tabindex="0" ngbDropdownToggle id="navbarDropdown3" role="button">
             {{ displayName }}

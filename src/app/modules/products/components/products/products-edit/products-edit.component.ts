@@ -1,8 +1,8 @@
 import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
-import {Category, Product} from '../../interfaces/product';
+import {Category, Product} from '../../../interfaces/product';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {ProductsService} from '../../services/products.service';
-import {ToastService} from '../../../../shared/toast/services/toast.service';
+import {ProductsService} from '../../../services/products.service';
+import {ToastService} from '../../../../../shared/toast/services/toast.service';
 import {Observable} from 'rxjs';
 import {AsyncPipe, NgForOf, NgIf} from '@angular/common';
 
@@ -41,7 +41,6 @@ export class ProductsEditComponent implements OnInit {
       category_id: ['', [Validators.required]],
       name: ['', [Validators.required]],
       description: ['', [Validators.required]],
-      price: ['', [Validators.required]],
       barCode: ['', [Validators.required]],
       imageUrl: [null, [Validators.required]],
     });

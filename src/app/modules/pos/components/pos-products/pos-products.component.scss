@@ -1,6 +1,6 @@
 /** IPAD MINI **/
 @media screen and (min-width: 1024px) and (orientation: landscape) {
-  .list-products {
+  #list-products {
     height: 600px;
     overflow: auto;
     overflow-y: scroll;
@@ -9,7 +9,7 @@
 
 /** IPAD AIR **/
 @media screen and (min-width: 1180px) and (orientation: landscape) {
-  .list-products {
+  #list-products {
     height: 640px;
     overflow: auto;
     overflow-y: scroll;
@@ -18,7 +18,7 @@
 
 /** 720p **/
 @media screen and (min-width: 1280px) and (max-width: 1920px) and (orientation: landscape) {
-  .list-products {
+  #list-products {
     height: 580px;
     overflow: auto;
     overflow-y: scroll;
@@ -27,25 +27,26 @@
 
 /** 1080p **/
 @media screen and (min-width: 1920px) and (orientation: landscape) {
-  .list-products {
-    height: 750px;
+  #list-products {
+    height: 700px;
     overflow: auto;
     overflow-y: scroll;
   }
 }
 
-.card {
-  height: 100%; /* Asegura que las cards tengan la misma altura */
-  overflow: hidden; /* Oculta cualquier contenido que sobresalga */
+.product-item {
+  cursor: pointer;
+  height: 100%;
+  overflow: hidden;
 }
 
-.card img {
-  object-fit: contain; /* Asegura que las imágenes mantengan sus proporciones */
+.product-item img {
+  object-fit: contain;
   height: 80px;
   width: 80%;
   margin-bottom: 10px;
 }
 
-.card p {
+.product-item p {
   margin: 0;
 }

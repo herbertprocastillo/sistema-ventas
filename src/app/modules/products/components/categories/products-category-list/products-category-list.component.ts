@@ -2,11 +2,11 @@ import {Component, EventEmitter, inject, Output} from '@angular/core';
 import {AsyncPipe, DatePipe, SlicePipe} from "@angular/common";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {NgbModal, NgbPagination} from "@ng-bootstrap/ng-bootstrap";
-import {UsersByIdComponent} from "../../../users/components/users-by-id/users-by-id.component";
-import {Category} from '../../interfaces/product';
+import {UsersByIdComponent} from "../../../../users/components/users-by-id/users-by-id.component";
+import {Category} from '../../../interfaces/product';
 import {Observable} from 'rxjs';
-import {ToastService} from '../../../../shared/toast/services/toast.service';
-import {ProductsService} from '../../services/products.service';
+import {ToastService} from '../../../../../shared/toast/services/toast.service';
+import {ProductsService} from '../../../services/products.service';
 
 @Component({
   selector: 'app-products-category-list',

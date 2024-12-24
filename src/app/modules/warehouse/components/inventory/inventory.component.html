@@ -1,128 +1,158 @@
 <div class="container-fluid container-xxl mt-2">
 
   <!-- HEADER -->
-  <div class="card shadow rounded border-light-subtle p-2 p-xxl-3 mb-2">
-    <div style="width: 100%" class="d-flex">
-      <!-- TITLE 25% -->
-      <div style="width: 25%">
-        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-          <ol class="breadcrumb mb-0">
-            <li class="breadcrumb-item">
-              <i class="fa-solid fa-house fa-lg ms-2 mt-3" style="cursor: pointer" [routerLink]="'/home'"></i>
-            </li>
-            <li class="breadcrumb-item active fs-5" aria-current="page">
-              ALMACEN
-            </li>
-          </ol>
-        </nav>
-      </div>
-      <!-- SEARCH AND BUTTONS 75% -->
-      <div style="width: 75%" class="d-flex justify-content-end">
-        <!-- INPUT SEARCH -->
-        <div class="me-2" style="width: 50%">
-          <input
-            type="text"
-            class="form-control"
-            placeholder="Buscar producto por nombre o código de barras."
-          >
+  <div class="row mb-2 mb-xxl-3">
+    <div class="col-12">
+      <div class="card shadow rounded border-light-subtle p-2 p-xxl-3">
+        <div style="width: 100%" class="d-flex">
+          <!-- TITLE - 25% -->
+          <div style="width: 25%">
+            <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+              <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item">
+                  <i class="fa-solid fa-house fa-lg ms-2 mt-3" style="cursor: pointer" [routerLink]="'/home'"></i>
+                </li>
+                <li class="breadcrumb-item active fs-5" aria-current="page">
+                  ALMACEN
+                </li>
+              </ol>
+            </nav>
+          </div>
+          <!-- SEARCH AND BUTTONS - 75% -->
+          <div style="width: 75%" class="d-flex justify-content-end">
+            <!-- CATEGORY FILTER -->
+            <select id="categorySelect" class="form-select m-0 me-2" style="width: 20%" [formControl]="categoryControl">
+              <option value="TODAS">CATEGORIAS</option>
+              <option *ngFor="let category of listCategories$ | async" [value]="category.id">
+                {{ category.name.toUpperCase() }}
+              </option>
+            </select>
+
+            <!-- INPUT SEARCH -->
+            <div class="me-2" style="width: 50%">
+              <input
+                type="text"
+                id="searchInput"
+                class="form-control"
+                placeholder="Buscar producto por nombre o código de barras."
+                [formControl]="searchControl"
+              >
+            </div>
+
+            <!-- BTN MOVEMENT -->
+            <button type="button" class="btn btn-outline-primary btn-sm me-2" [routerLink]="'/warehouse/movements'">
+              <i class="fa-solid fa-right-left"></i>
+              MOVIMIENTOS
+            </button>
+
+            <!-- BTN EXCEL -->
+            <app-inventory-export [filteredData]="filteredInventories$.value"></app-inventory-export>
+
+          </div>
         </div>
-
-        <!-- BTN MOVEMENT -->
-        <button type="button" class="btn btn-outline-primary btn-sm me-2" [routerLink]="'/warehouse/movements'">
-          <i class="fa-solid fa-right-left"></i>
-          MOVIMIENTOS
-        </button>
-
-        <!-- BTN EXCEL -->
-        <button type="button" class="btn btn-success btn-sm">
-          <i class="fa-solid fa-file-excel"></i>
-          EXPORT
-        </button>
       </div>
     </div>
   </div>
 
-  <!-- LIST INVENTORIES -->
-  <div class="card shadow rounded border-0 p-2">
-    <div class="table-responsive">
-      <table class="table table-bordered">
-        <thead>
-        <tr class="text-nowrap text-center">
-          <th scope="col">#</th>
-          <th scope="col"></th>
-          <th scope="col">PRODUCTO</th>
-          <th scope="col">STOCK</th>
-          <th scope="col">PRECIO VENTA</th>
-          <th scope="col">PRECIO COSTO</th>
-          <th scope="col">ULTIMA ACTUALIZACIÓN</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr class="text-nowrap text-center"
-            *ngFor="let inventory of paginatedList; let i = index">
-          <th scope="row">{{ (page - 1) * pageSize + i + 1 }}</th>
-          <!-- BUTTON EDIT -->
-          <td>
-            <button type="button" class="btn btn-primary btn-sm" (click)="openEditModal(inventory,editModal)">
-              <i class="fa-solid fa-pen-to-square"></i>
-            </button>
-            <ng-template #editModal let-modal>
-              <div class="modal-header">
-                <h5 class="modal-title">Actualizar Precio de Venta</h5>
-                <button type="button" class="btn-close" aria-label="Close"
-                        (click)="modal.dismiss('Cross click')"></button>
-              </div>
-              <div class="modal-body">
-                <form [formGroup]="editForm">
-                  <div class="form-floating">
-                    <input
-                      type="number"
-                      id="priceSale"
-                      class="form-control"
-                      formControlName="price_sale"
-                      placeholder="Precio Venta"
-                      min="0"
-                    />
-                    <label for="priceSale">Nuevo Precio de Venta</label>
+  <!-- LIST -->
+  <div class="row">
+    <div class="col-12">
+      <div class="card shadow rounded border-0 p-2 p-xxl-3">
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead>
+            <tr class="text-nowrap text-center">
+              <th scope="col">#</th>
+              <th scope="col"></th>
+              <th scope="col">PRODUCTO</th>
+              <th scope="col">STOCK</th>
+              <th scope="col">PRECIO VENTA</th>
+              <th scope="col">PRECIO COSTO</th>
+              <th scope="col">ULTIMA ACTUALIZACIÓN</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="text-nowrap text-center"
+                *ngFor="let inventory of (filteredInventories$ | async) | slice:(page - 1) * pageSize:page * pageSize; let i = index">
+              <th scope="row">{{ (page - 1) * pageSize + i + 1 }}</th>
+              <!-- BUTTON EDIT -->
+              <td>
+                <button type="button" class="btn btn-primary btn-sm" (click)="openEditModal(inventory,editModal)">
+                  <i class="fa-solid fa-pen-to-square"></i>
+                </button>
+                <ng-template #editModal let-modal>
+                  <div class="modal-header">
+                    <h5 class="modal-title">Actualizar Inventario</h5>
+                    <button type="button" class="btn-close" aria-label="Close"
+                            (click)="modal.dismiss('Cross click')"></button>
                   </div>
-                </form>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cancel')">Cancelar</button>
-                <button type="button" class="btn btn-primary" (click)="updatePrice(modal)">Actualizar</button>
-              </div>
-            </ng-template>
+                  <div class="modal-body">
+                    <form [formGroup]="editForm">
 
-          </td>
-          <!-- PRODUCT INFO -->
-          <td>
-            <app-product-info [productId]="inventory.product_id"></app-product-info>
-          </td>
-          <!-- STOCK -->
-          <td>
-            {{ inventory.stock | number }}
-          </td>
-          <!-- PRICE SALE -->
-          <td>
-            {{ inventory.price_sale | currency:'S/.' }}
-          </td>
-          <!-- PRICE COST -->
-          <td>
-            {{ inventory.price_cost | currency:'S/.' }}
-          </td>
-          <!-- DATE UPDATED -->
-          <td>
-            {{ inventory.updatedAt?.toMillis() | date:'mediumDate' }}
-          </td>
-        </tr>
-        </tbody>
-      </table>
-      <ngb-pagination
-        [collectionSize]="listInventories.length"
-        [(page)]="page"
-        [pageSize]="pageSize"
-        aria-label="Default pagination"
-      ></ngb-pagination>
+                      <!-- PRICE SALE -->
+                      <div class="form-floating mb-3">
+                        <input
+                          type="number"
+                          id="priceSale"
+                          class="form-control"
+                          formControlName="price_sale"
+                          placeholder="Precio Venta"
+                          min="0"
+                        />
+                        <label for="priceSale">Nuevo Precio de Venta</label>
+                      </div>
+
+                      <!-- STOCK -->
+                      <div class="form-floating">
+                        <input
+                          type="number"
+                          id="stock"
+                          class="form-control"
+                          formControlName="stock"
+                          placeholder="Stock"
+                          min="0"
+                        />
+                        <label for="priceSale">Nuevo stock</label>
+                      </div>
+                    </form>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cancel')">Cancelar</button>
+                    <button type="button" class="btn btn-primary" (click)="updateInventory(modal)">Actualizar</button>
+                  </div>
+                </ng-template>
+              </td>
+
+              <!-- PRODUCT -->
+              <td>
+                <div class="d-inline-flex">
+                  <img class="me-3" src="{{inventory.product_image}}" style="height: 30px" alt="">
+                  <p>{{ inventory.product_name }} -- {{ inventory.product_description }}</p>
+                </div>
+              </td>
+
+              <!-- STOCK -->
+              <td>{{ inventory.stock | number }}</td>
+
+              <!-- PRICE SALE -->
+              <td>{{ inventory.price_sale | currency:'S/.' }}</td>
+
+              <!-- PRICE COST -->
+              <td>{{ inventory.price_cost | currency:'S/.' }}</td>
+
+              <!-- DATE UPDATED -->
+              <td>{{ inventory.updatedAt?.toMillis() | date:'mediumDate' }}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <ngb-pagination
+          [collectionSize]="(filteredInventories$ | async)?.length || 0"
+          [(page)]="page"
+          [pageSize]="pageSize"
+          aria-label="Default pagination"
+        ></ngb-pagination>
+      </div>
     </div>
   </div>
 </div>

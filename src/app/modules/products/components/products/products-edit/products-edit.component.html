@@ -24,21 +24,11 @@
       <label for="descriptionInput"><span class="fw-medium">DESCRIPCIÓN: </span>Ejm, Botella 500 ml </label>
     </div>
 
-    <!-- PRICE AND BARCODE -->
-    <div class="row mb-3">
-      <div class="col-4">
-        <div class="form-floating">
-          <input type="number" class="form-control" id="priceInput" formControlName="price" required>
-          <label for="priceInput"><span class="fw-medium">PRECIO: </span></label>
-        </div>
-      </div>
-      <div class="col-8">
-        <div class="form-floating">
-          <input type="text" min="1" max="99999" class="form-control" id="barCodeInput" formControlName="barCode"
-                 required>
-          <label for="barCodeInput"><span class="fw-medium">CÓDIGO DE BARRAS: </span></label>
-        </div>
-      </div>
+    <!-- BAR CODE -->
+    <div class="form-floating mb-3">
+      <input type="text" min="1" max="99999" class="form-control" id="barCodeInput" formControlName="barCode"
+             required>
+      <label for="barCodeInput"><span class="fw-medium">CÓDIGO DE BARRAS: </span></label>
     </div>
 
     <!-- FILE UPLOAD -->

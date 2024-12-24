@@ -1,13 +1,19 @@
-import {Component, EventEmitter, inject, Output} from '@angular/core';
+import {Component, EventEmitter, inject, OnInit, Output} from '@angular/core';
 import {AsyncPipe, CurrencyPipe, DatePipe, NgIf, NgStyle, SlicePipe} from '@angular/common';
 import {NgbModal, NgbPagination} from '@ng-bootstrap/ng-bootstrap';
-import {ProductInfoComponent} from '../../../../products/components/product-info/product-info.component';
 import {UsersByIdComponent} from '../../../../users/components/users-by-id/users-by-id.component';
 import {Movement} from '../../../interfaces/warehouse';
-import {Observable} from 'rxjs';
+import {BehaviorSubject, combineLatest, Observable} from 'rxjs';
 import {WarehouseService} from '../../../services/warehouse.service';
 import {RouterLink} from '@angular/router';
 import {ToastService} from '../../../../../shared/toast/services/toast.service';
+import {ReactiveFormsModule} from '@angular/forms';
+import {MovementsExportComponent} from '../movements-export/movements-export.component';
+import {UserService} from '../../../../users/services/user.service';
+import {ProductsService} from '../../../../products/services/products.service';
+import {User as AppUser} from '../../../../users/interfaces/user';
+import {Product} from '../../../../products/interfaces/product';
+import {map} from 'rxjs/operators';
 
 @Component({
   selector: 'app-movements-list',
@@ -16,35 +22,65 @@ import {ToastService} from '../../../../../shared/toast/services/toast.service';
     CurrencyPipe,
     DatePipe,
     NgbPagination,
-    ProductInfoComponent,
     SlicePipe,
-    UsersByIdComponent,
-    NgStyle,
+     NgStyle,
     AsyncPipe,
     RouterLink,
-    NgIf
+    NgIf,
+    ReactiveFormsModule,
+    MovementsExportComponent
   ],
   templateUrl: './movements-list.component.html',
   styleUrl: './movements-list.component.scss'
 })
-export class MovementsListComponent {
+export class MovementsListComponent implements OnInit {
   /** IO **/
   @Output() editMovement = new EventEmitter<Movement>();
   @Output() template = new EventEmitter<string>();
+
   /** INJECTS **/
+  private usersService = inject(UserService);
+  private productsService = inject(ProductsService);
   private warehouseService = inject(WarehouseService);
   private modalService = inject(NgbModal);
   private toastService = inject(ToastService);
 
   /** COLLECTIONS **/
-  public listMovements$: Observable<Movement[]>;
+  public listUsers$: Observable<AppUser[]> = this.usersService.getUsers();
+  public listProducts$: Observable<Product[]> = this.productsService.getProducts();
+  public listMovements$: Observable<Movement[]> = this.warehouseService.getMovements();
+  public filteredMovements$: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+
   /** VARIABLES **/
   public page: number = 1;
-  public pageSize: number = 10;
+  public pageSize: number = 8;
 
-  constructor() {
-    this.listMovements$ = this.warehouseService.getMovements();
+  ngOnInit(): void {
+    combineLatest([
+      this.listMovements$,
+      this.listProducts$,
+      this.listUsers$,
+    ]).pipe(
+      map(([movements, products, users]) => {
+        return movements.map(movement => {
+          const product = products.find(pro => pro.id === movement.product_id);
+          const createdBy = users.find(user => user.id === movement.createdBy);
+          const updatedBy = users.find(user => user.id === movement.updatedBy);
+          return {
+            ...movement,
+            product_name: product ? product.name : 'Sin producto',
+            createdBy: createdBy ? createdBy.displayName : 'Sin Usuario',
+            updatedBy: updatedBy ? updatedBy.displayName : 'Sin Usuario',
+          };
+        });
+      })
+    ).subscribe((filterData) => {
+      this.filteredMovements$.next(filterData);
+    });
+
+    setTimeout(() => document.getElementById('searchInput')?.focus(), 0);
   }
+
 
   getTemplate(template: string) {
     this.template.emit(template);

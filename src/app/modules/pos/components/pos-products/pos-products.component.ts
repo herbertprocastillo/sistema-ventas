@@ -31,10 +31,10 @@ export class PosProductsComponent implements OnInit, OnDestroy, AfterViewInit {
   private warehouseService = inject(WarehouseService);
 
   /** COLLECTIONS **/
-  listProducts: PosSale[] = [];
+  public listProducts: PosSale[] = [];
 
   /** VARIABLES **/
-  searchTerm: string = '';
+  public searchTerm: string = '';
   private destroy$: Subject<void> = new Subject<void>();
 
   ngOnInit(): void {
@@ -44,7 +44,7 @@ export class PosProductsComponent implements OnInit, OnDestroy, AfterViewInit {
         next: (combinedProducts: PosSale[]) => {
           this.listProducts = combinedProducts;
         },
-        error: (err) => console.error('Error:', err),
+        error: (e) => console.error('Error:', e),
       });
   }
 
