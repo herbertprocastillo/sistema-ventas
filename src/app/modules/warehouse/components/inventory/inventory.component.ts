@@ -11,6 +11,7 @@ import {ProductsService} from '../../../products/services/products.service';
 import {map} from 'rxjs/operators';
 import {AsyncPipe, CurrencyPipe, DatePipe, DecimalPipe, NgForOf, SlicePipe} from '@angular/common';
 import {InventoryExportComponent} from './inventory-export/inventory-export.component';
+import {WarehouseNavbarComponent} from '../warehouse-navbar/warehouse-navbar.component';
 
 @Component({
   selector: 'app-inventory',
@@ -26,6 +27,7 @@ import {InventoryExportComponent} from './inventory-export/inventory-export.comp
     NgForOf,
     SlicePipe,
     InventoryExportComponent,
+    WarehouseNavbarComponent,
   ],
   templateUrl: './inventory.component.html',
   styleUrl: './inventory.component.scss'
@@ -49,6 +51,7 @@ export class InventoryComponent implements OnInit {
   public categoryControl = new FormControl('TODAS');
   public editForm: FormGroup = this.fb.group({
     price_sale: [0, [Validators.required, Validators.min(0)]],
+    price_cost: [0, [Validators.required, Validators.min(0)]],
     stock: [0, [Validators.required]],
   });
 
@@ -111,6 +114,7 @@ export class InventoryComponent implements OnInit {
     this.selectedInventory = inventory;
     this.editForm.patchValue({
       price_sale: inventory.price_sale,
+      price_cost: inventory.price_cost,
       stock: inventory.stock,
     });
     this.modalService.open(modalTemplate, {backdrop: 'static'});
@@ -124,12 +128,13 @@ export class InventoryComponent implements OnInit {
       return;
     }
 
-    const newPrice = this.editForm.get('price_sale')?.value;
+    const newPriceSale = this.editForm.get('price_sale')?.value;
+    const newPriceCost = this.editForm.get('price_cost')?.value;
     const newStock = this.editForm.get('stock')?.value;
 
     try {
       // @ts-ignore
-      await this.warehouseService.updateInventory(this.selectedInventory?.id, newPrice, newStock);
+      await this.warehouseService.updateInventory(this.selectedInventory?.id, newPriceSale, newPriceCost, newStock);
       modal.close();
       this.toastService.showSuccess("Precio actualizado exitosamente.");
 

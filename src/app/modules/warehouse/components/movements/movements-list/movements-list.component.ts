@@ -1,7 +1,6 @@
 import {Component, EventEmitter, inject, OnInit, Output} from '@angular/core';
 import {AsyncPipe, CurrencyPipe, DatePipe, NgIf, NgStyle, SlicePipe} from '@angular/common';
 import {NgbModal, NgbPagination} from '@ng-bootstrap/ng-bootstrap';
-import {UsersByIdComponent} from '../../../../users/components/users-by-id/users-by-id.component';
 import {Movement} from '../../../interfaces/warehouse';
 import {BehaviorSubject, combineLatest, Observable} from 'rxjs';
 import {WarehouseService} from '../../../services/warehouse.service';
@@ -23,7 +22,7 @@ import {map} from 'rxjs/operators';
     DatePipe,
     NgbPagination,
     SlicePipe,
-     NgStyle,
+    NgStyle,
     AsyncPipe,
     RouterLink,
     NgIf,
@@ -35,7 +34,6 @@ import {map} from 'rxjs/operators';
 })
 export class MovementsListComponent implements OnInit {
   /** IO **/
-  @Output() editMovement = new EventEmitter<Movement>();
   @Output() template = new EventEmitter<string>();
 
   /** INJECTS **/
@@ -53,7 +51,7 @@ export class MovementsListComponent implements OnInit {
 
   /** VARIABLES **/
   public page: number = 1;
-  public pageSize: number = 8;
+  public pageSize: number = 10;
 
   ngOnInit(): void {
     combineLatest([
@@ -84,10 +82,6 @@ export class MovementsListComponent implements OnInit {
 
   getTemplate(template: string) {
     this.template.emit(template);
-  }
-
-  getEdit(movement: Movement): void {
-    this.editMovement.emit(movement);
   }
 
   /*********************

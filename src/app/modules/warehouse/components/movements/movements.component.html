@@ -2,7 +2,6 @@
 
 @if (template === "LIST") {
   <app-movements-list
-    (editMovement)="getEdit($event)"
     (template)="getTemplate($event)"
   ></app-movements-list>
 }
@@ -12,12 +11,4 @@
     (newCancel)="getCancel($event)"
     (template)="getTemplate($event)"
   ></app-movements-new>
-}
-
-@if (template === "EDIT") {
-  <app-movements-edit
-    [movement]="editMovement"
-    (template)="getTemplate($event)"
-    (editCancel)="getCancel($event)"
-  ></app-movements-edit>
 }

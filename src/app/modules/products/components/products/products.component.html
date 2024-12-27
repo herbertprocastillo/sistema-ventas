@@ -1,63 +1,56 @@
 <app-products-navbar></app-products-navbar>
-<div class="container-fluid container-xxl mt-2">
+
+<div class="container-fluid container-xxl mt-2 mt-xxl-3">
 
   <!-- HEADER -->
-  <div class="row mb-2 mb-xxl-3">
-    <div class="col-12">
-      <div class="card shadow rounded border-light-subtle p-2 p-xxl-3">
-        <div style="width: 100%" class="d-flex">
-          <!-- TITLE - 25% -->
-          <div style="width: 25%">
-            <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-              <ol class="breadcrumb mb-0">
-                <li class="breadcrumb-item">
-                  <i class="fa-solid fa-house fa-lg ms-2 mt-3" style="cursor: pointer" [routerLink]="'/home'"></i>
-                </li>
-                <li class="breadcrumb-item active fs-5" aria-current="page">
-                  PRODUCTOS
-                </li>
-              </ol>
-            </nav>
-          </div>
-          <!-- SEARCH AND BUTTONS - 75% -->
-          <div style="width: 75%" class="d-flex justify-content-end">
-            <!-- CATEGORY FILTER -->
-            <select id="categorySelect" class="form-select m-0 me-2" style="width: 20%" [formControl]="categoryControl">
-              <option value="TODAS">CATEGORIAS</option>
-              <option *ngFor="let category of listCategories$ | async" [value]="category.id">
-                {{ category.name.toUpperCase() }}
-              </option>
-            </select>
-
-            <!-- INPUT SEARCH -->
-            <div class="m-0 me-2" style="width: 50%">
-              <input
-                type="text"
-                id="searchInput"
-                class="form-control m-0"
-                placeholder="Buscar por nombre, descripción o codigo de barras"
-                [formControl]="searchControl"
-              >
-            </div>
-
-            <!-- BTN CATEGORIES -->
-            <button type="button" class="btn btn-outline-primary btn-sm me-2" [routerLink]="'/products/categories'">
-              <i class="fa-solid fa-right-left"></i>
-              CATEGORIAS
-            </button>
-
-            <!-- BTN EXCEL -->
-            <app-products-export [filteredData]="filteredProducts$.value"></app-products-export>
-
-          </div>
+  <div class="card shadow rounded border-light-subtle p-2 p-xxl-3 mb-2 mb-xxl-3">
+    <div class="row">
+      <div class="col-4 col-xl-5">
+        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+          <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item">
+              <i class="fa-solid fa-house fa-lg ms-2 mt-3" style="cursor: pointer" [routerLink]="'/home'"></i>
+            </li>
+            <li class="breadcrumb-item active fs-5" aria-current="page">
+              PRODUCTOS
+            </li>
+          </ol>
+        </nav>
+      </div>
+      <div class="col-8 col-xl-7 d-flex">
+        <!-- FILTER CATEGORIES -->
+        <div style="width: 30%" class="text-end">
+          <select id="categorySelect" class="form-select" [formControl]="categoryControl">
+            <option value="TODAS">CATEGORIAS</option>
+            <option *ngFor="let category of listCategories$ | async" [value]="category.id">
+              {{ category.name.toUpperCase() }}
+            </option>
+          </select>
         </div>
+
+        <!-- SEARCH FIELD -->
+        <div style="width: 52%;" class="text-end">
+          <input
+            type="text"
+            id="searchInput"
+            class="form-control ms-2"
+            placeholder="Buscar por nombre o codigo de barras"
+            [formControl]="searchControl"
+          >
+        </div>
+
+        <!-- BUTTON -->
+        <div style="width: 18%" class="text-end">
+          <app-products-export [filteredData]="filteredProducts$.value"></app-products-export>
+        </div>
+
       </div>
     </div>
   </div>
 
   <!-- LIST -->
   <div class="row">
-    <div class="col-5 col-xl-4">
+    <div class="col-4">
       @if (editProduct) {
         <app-products-edit
           [product]="editProduct"
@@ -68,7 +61,7 @@
         <app-products-new></app-products-new>
       }
     </div>
-    <div class="col-7 col-xl-8">
+    <div class="col-8">
       <app-products-list
         (product)="getEditProduct($event)"
         [filteredProducts$]="filteredProducts$"

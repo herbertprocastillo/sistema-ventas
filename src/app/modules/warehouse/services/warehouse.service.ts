@@ -158,7 +158,7 @@ export class WarehouseService {
   }
 
   /** UPDATE INVENTORY **/
-  async updateMovementInventory(productId: string, type: 'INGRESO' | 'SALIDA', quantity: number, price_cost: number, inventoryData: any): Promise<void> {
+  async updateMovementInventory(productId: string, type: 'INGRESO' | 'SALIDA', quantity: number, price: number, inventoryData: any): Promise<void> {
     let newStock = inventoryData.stock;
     if (type === 'INGRESO') {
       newStock += quantity;
@@ -173,7 +173,7 @@ export class WarehouseService {
     const user = this.auth.currentUser;
     if (user) {
       newInventory.stock = newStock;
-      newInventory.price_cost = price_cost;
+      newInventory.price_cost = price;
       newInventory.price_sale = inventoryData.price_sale;
       newInventory.updatedBy = user.uid;
       newInventory.updatedAt = Timestamp.now();
@@ -186,7 +186,7 @@ export class WarehouseService {
   }
 
   /** UPDATE INVENTORY **/
-  async updateInventory(id: string, price_sale: number, stock: number): Promise<void> {
+  async updateInventory(id: string, price_sale: number, price_cost: number, stock: number): Promise<void> {
     const ref = doc(this.firestore, `warehouseInventory/${id}`);
     const updateInventory = {} as Inventory;
 
@@ -194,6 +194,7 @@ export class WarehouseService {
 
     if (user) {
       updateInventory.price_sale = price_sale;
+      updateInventory.price_cost = price_cost;
       updateInventory.stock = stock;
       updateInventory.updatedBy = user.uid;
       updateInventory.updatedAt = Timestamp.now();

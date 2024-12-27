@@ -1,6 +1,5 @@
 import {Component} from '@angular/core';
 import {WarehouseNavbarComponent} from '../warehouse-navbar/warehouse-navbar.component';
-import {MovementsEditComponent} from './movements-edit/movements-edit.component';
 import {MovementsNewComponent} from './movements-new/movements-new.component';
 import {Movement} from '../../interfaces/warehouse';
 import {MovementsListComponent} from './movements-list/movements-list.component';
@@ -10,7 +9,6 @@ import {MovementsListComponent} from './movements-list/movements-list.component'
   standalone: true,
   imports: [
     WarehouseNavbarComponent,
-    MovementsEditComponent,
     MovementsNewComponent,
     MovementsListComponent
   ],
@@ -26,14 +24,10 @@ export class MovementsComponent {
     this.template = template;
   }
 
-  getEdit(movement: Movement): void {
-    this.editMovement = movement;
-    this.template = "EDIT";
-  }
-
   getCancel(cancel: boolean): void {
     if (cancel) {
       this.editMovement = null;
+      this.template = "LIST";
     }
   }
 }

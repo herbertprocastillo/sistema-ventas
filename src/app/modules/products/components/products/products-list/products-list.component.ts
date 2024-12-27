@@ -25,10 +25,12 @@ export class ProductsListComponent {
   /** IO **/
   @Input() filteredProducts$: Observable<Product[]> | undefined;
   @Output() product = new EventEmitter<Product>();
+
   /** INJECTS **/
   private productsService = inject(ProductsService);
   private modalService = inject(NgbModal);
   private toastService = inject(ToastService);
+
   /** VARIABLES **/
   public page: number = 1;
   public pageSize: number = 10;
@@ -37,7 +39,7 @@ export class ProductsListComponent {
     this.product.emit(product);
   }
 
-  /** DELETE PRODUCT **/
+  /** OPEN MODAL DELETE **/
   async openDeleteModal(content: any, productId: string | undefined): Promise<void> {
     if (!productId) {
       this.toastService.showError('El ID del producto no es válido.');
@@ -54,6 +56,7 @@ export class ProductsListComponent {
     }
   }
 
+  /** DELETE PRODUCT **/
   async deleteProduct(productId: string): Promise<void> {
     try {
       await this.productsService.deleteProduct(productId);

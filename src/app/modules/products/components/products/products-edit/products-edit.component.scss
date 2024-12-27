@@ -5,33 +5,3 @@
   border: 1px solid #ddd; /* Opcional: Agrega un borde para mejor visualización */
   border-radius: 5px; /* Opcional: Bordes redondeados */
 }
-/** IPAD MINI **/
-@media screen and (min-width: 1024px) and (orientation: landscape) {
-  #editProduct {
-    overflow: auto;
-    height: 600px;
-  }
-}
-
-/** IPAD AIR **/
-@media screen and (min-width: 1180px) and (orientation: landscape) {
-  #editProduct {
-    overflow: auto;
-    height: 650px;
-  }
-}
-
-/** 720p **/
-@media screen and (min-width: 1280px) and (max-width: 1920px) and (orientation: landscape) {
-  #editProduct {
-    overflow: auto;
-    height: 620px;
-  }
-}
-
-/** 1080p **/
-@media screen and (min-width: 1920px) and (orientation: landscape) {
-  #editProduct {
-    height: 700px;
-  }
-}

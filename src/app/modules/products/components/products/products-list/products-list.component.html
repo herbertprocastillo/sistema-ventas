@@ -1,4 +1,4 @@
-<div id="listProducts" class="card shadow rounded border-light-subtle p-3 pb-0">
+<div class="card shadow rounded border-0 p-2 p-xxl-3">
   <div class="table-responsive mb-2">
     <table class="table table-striped">
       <thead>
@@ -20,14 +20,12 @@
         @for (product of (filteredProducts$ | async)| slice:(page - 1) * pageSize: page * pageSize; track i; let i = $index) {
           <tr class="text-nowrap text-center">
             <th scope="row">{{ (page - 1) * pageSize + i + 1 }}</th>
-
             <!-- BUTTON EDIT -->
             <td>
               <button type="button" class="btn btn-primary btn-sm" (click)="getEditProduct(product)">
                 <i class="fa-solid fa-pen-to-square"></i>
               </button>
             </td>
-
             <!-- BUTTON DELETE & MODAL DELETE -->
             <td>
               <button type="button" class="btn btn-danger btn-sm"
@@ -49,13 +47,10 @@
                 </div>
               </ng-template>
             </td>
-
             <!-- PRODUCT NAME-->
             <td>{{ product.name.toUpperCase() }}</td>
-
             <!-- PRODUCT CATEGORY -->
             <td>{{ product.category_name }}</td>
-
             <!-- PRODUCT IMAGE AND MODAL PREVIEW -->
             <td>
               <i class="fa-regular fa-image fa-lg" style="cursor: pointer"
@@ -72,31 +67,25 @@
                 </div>
               </ng-template>
             </td>
-
             <!-- PRODUCT DESCRIPTION -->
             <td>{{ product.description }}</td>
-
             <!-- PRODUCT USER REGISTER -->
             <td>{{ product.createdBy }}</td>
-
             <!-- PRODUCT DATE REGISTER -->
             <td>{{ product.createdAt.toMillis() | date:'mediumDate' }}</td>
-
             <!-- PRODUCT USER UPDATED -->
             <td>{{ product.updatedBy }}</td>
-
             <!-- PRODUCT DATE UPDATED -->
             <td>{{ product.updatedAt.toMillis() | date:'mediumDate' }}</td>
-
           </tr>
         }
       </tbody>
     </table>
+    <ngb-pagination
+      [collectionSize]="(filteredProducts$ | async)?.length || 0"
+      [(page)]="page"
+      [pageSize]="pageSize"
+      aria-label="Default pagination"
+    ></ngb-pagination>
   </div>
-  <ngb-pagination
-    [collectionSize]="(filteredProducts$ | async)?.length || 0"
-    [(page)]="page"
-    [pageSize]="pageSize"
-    aria-label="Default pagination"
-  ></ngb-pagination>
 </div>
