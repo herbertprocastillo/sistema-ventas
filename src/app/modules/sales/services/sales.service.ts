@@ -30,10 +30,10 @@ export class SalesService {
       sale.items.map(async (item) => {
           const newStock = item.availableStock - item.quantity;
           if (newStock < 0) {
-            console.error(`ERROR! stock insuficiente para el producto ${item.productName}`);
+            console.error(`ERROR! stock insuficiente para el producto ${item.product_name}`);
           }
           /** Update Stock **/
-          await this.warehouseService.updateInventoryStock(item.productId, newStock);
+          await this.warehouseService.updateInventoryStock(item.product_id, newStock);
         }
       )
 

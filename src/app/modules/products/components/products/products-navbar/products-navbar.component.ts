@@ -2,7 +2,7 @@ import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {NgbDropdown, NgbDropdownItem, NgbDropdownMenu, NgbDropdownToggle} from "@ng-bootstrap/ng-bootstrap";
 import {Router, RouterLink} from '@angular/router';
 import {Subscription} from 'rxjs';
-import {AuthService} from '../../../auth/services/auth.service';
+import {AuthService} from '../../../../auth/services/auth.service';
 
 @Component({
   selector: 'app-products-navbar',

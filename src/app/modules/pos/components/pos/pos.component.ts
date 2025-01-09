@@ -25,7 +25,7 @@ export class PosComponent {
 
   /** ADD NEW PRODUCT TO SHOPPING CART **/
   addToCart(product: PosSale): void {
-    const existingItemIndex: number = this.cartItems.findIndex((item: SaleItem) => item.productId === product.id);
+    const existingItemIndex: number = this.cartItems.findIndex((item: SaleItem) => item.product_id === product.id);
     /** get information stock from product (product: PosSale) **/
     const availableStock: number = product.stock;
     /** product already exists at shopping cart **/
@@ -38,7 +38,7 @@ export class PosComponent {
         return; /** Do not allow adding more to the shopping cart **/
       }
       this.cartItems[existingItemIndex].quantity++;
-      this.cartItems[existingItemIndex].subtotal = this.cartItems[existingItemIndex].quantity * this.cartItems[existingItemIndex].price;
+      this.cartItems[existingItemIndex].subtotal = this.cartItems[existingItemIndex].quantity * this.cartItems[existingItemIndex].price_sale;
     } else {
       /** add new product in the shopping cart **/
       /** check if available stock is greater than 1 **/
@@ -51,11 +51,11 @@ export class PosComponent {
       this.cartItems = [
         ...this.cartItems,
         {
-          productId: product.id!,
-          productName: product.name,
+          product_id: product.id!,
+          product_name: product.name,
           availableStock: availableStock,
           quantity: 1,
-          price: product.price_sale,
+          price_sale: product.price_sale,
           subtotal: product.price_sale,
         },
       ];
@@ -69,7 +69,7 @@ export class PosComponent {
 
   /** DELETE PRODUCTS FROM CART **/
   removeFromCart(item: SaleItem): void {
-    this.cartItems = this.cartItems.filter(i => i.productId !== item.productId);
+    this.cartItems = this.cartItems.filter(i => i.product_id !== item.product_id);
   }
 
   /** GET TOTAL AMOUNT FROM CART **/

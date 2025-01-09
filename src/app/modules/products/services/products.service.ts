@@ -27,7 +27,7 @@ export class ProductsService {
   private storage = inject(Storage);
   private auth = inject(Auth);
 
-  /** VARIABLES **/
+  /** COLLECTIONS **/
   private readonly productsCollection: CollectionReference = collection(this.firestore, 'products');
   private readonly categoriesCollection: CollectionReference = collection(this.firestore, 'categories');
 
@@ -105,14 +105,6 @@ export class ProductsService {
       .replace(/[^a-zA-Z0-9\s]/g, "")
       .toLowerCase()
       .trim();
-
-/*
-    const exists: boolean = await this.productExists(normalizedName);
-*/
-
-    /*if (exists) {
-      throw new Error(`El producto ${product.name} ya existe`);
-    }*/
 
     try {
       const user = this.auth.currentUser;

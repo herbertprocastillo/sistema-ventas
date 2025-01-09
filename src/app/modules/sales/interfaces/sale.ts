@@ -7,17 +7,21 @@ export interface Sale {
   paymentMethod: string;
   cashReceived?: number;
   cashChange?: number;
+  status?: string;
+  /** TERMINADA -- ANULADA  **/
 
   createdBy?: string;
   createdAt?: Timestamp;
+  updatedBy?: string;
+  updatedAt?: Timestamp;
 }
 
 export interface SaleItem {
-  productId: string;
-  productName: string;
+  product_id: string;
+  product_name: string;
   availableStock: number;
   quantity: number;
-  price: number;
+  price_sale: number;
   subtotal: number;
 
   createdBy?: string;

@@ -1,1 +1,23 @@
-<p>purchasing works!</p>
+<app-purchasing-navbar/>
+
+@if (template === "LIST") {
+  <app-purchasing-list
+    (template)="getTemplate($event)"
+    (selectedOrder)="getOrderSelected($event)"
+  />
+}
+
+@if (template === "NEW") {
+  <app-purchasing-new
+    (newCancel)="getCancel($event)"
+    (template)="getTemplate($event)"
+  />
+}
+
+@if (template === "EDIT") {
+  <app-purchasing-edit
+    [order]="selectedOrder"
+    (template)="getTemplate($event)"
+    (editCancel)="getCancel($event)"
+  />
+}

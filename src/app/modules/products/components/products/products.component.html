@@ -18,9 +18,14 @@
         </nav>
       </div>
       <div class="col-8 col-xl-7 d-flex">
+
         <!-- FILTER CATEGORIES -->
         <div style="width: 30%" class="text-end">
-          <select id="categorySelect" class="form-select" [formControl]="categoryControl">
+          <select
+            id="categorySelect"
+            class="form-select"
+            [formControl]="categoryControl"
+          >
             <option value="TODAS">CATEGORIAS</option>
             <option *ngFor="let category of listCategories$ | async" [value]="category.id">
               {{ category.name.toUpperCase() }}
@@ -41,32 +46,123 @@
 
         <!-- BUTTON -->
         <div style="width: 18%" class="text-end">
-          <app-products-export [filteredData]="filteredProducts$.value"></app-products-export>
+          <app-products-export [filteredData]="filteredProducts$.value"/>
         </div>
 
       </div>
     </div>
   </div>
 
-  <!-- LIST -->
   <div class="row">
+
+    <!----------------------------------------------->
+    <!-------------- FORM NEW & EDIT ---------------->
     <div class="col-4">
       @if (editProduct) {
         <app-products-edit
           [product]="editProduct"
           (editCancel)="getCancel($event)"
-        ></app-products-edit>
-
+        />
       } @else {
-        <app-products-new></app-products-new>
+        <app-products-new/>
       }
     </div>
-    <div class="col-8">
-      <app-products-list
-        (product)="getEditProduct($event)"
-        [filteredProducts$]="filteredProducts$"
-      ></app-products-list>
 
+    <!---------------------------------------------->
+    <!------------------- LIST --------------------->
+    <div class="col-8">
+      <div class="card shadow rounded border-light-subtle p-2 p-xxl-3 mb-2 mb-xxl-3">
+        <div class="table-responsive">
+          <table class="table table-bordered text-center">
+            <thead>
+            <tr class="text-nowrap">
+              <th scope="col">#</th>
+              <th scope="col"></th>
+              <th scope="col"></th>
+              <th scope="col">PRODUCTO</th>
+              <th scope="col">CATEGORIA</th>
+              <th scope="col"></th>
+              <th scope="col">DESCRIPCIÓN</th>
+              <th scope="col">USUARIO REGISTRO</th>
+              <th scope="col">FECHA REGISTRO</th>
+              <th scope="col">USUARIO ACTUALIZACIÓN</th>
+              <th scope="col">FECHA ACTUALIZACIÓN</th>
+            </tr>
+            </thead>
+            <tbody>
+              @for (product of (filteredProducts$ | async)| slice:(page - 1) * pageSize: page * pageSize; track i; let i = $index) {
+                <tr class="text-nowrap">
+                  <th scope="row">{{ (page - 1) * pageSize + i + 1 }}</th>
+                  <!-- BUTTON EDIT -->
+                  <td>
+                    <button type="button" class="btn btn-primary btn-sm" (click)="getEditProduct(product)">
+                      <i class="fa-solid fa-pen-to-square"></i>
+                    </button>
+                  </td>
+                  <!-- BUTTON DELETE & MODAL DELETE -->
+                  <td>
+                    <button type="button" class="btn btn-danger btn-sm"
+                            (click)="openDeleteModal(deleteModal,product.id)">
+                      <i class="fa-regular fa-trash-can"></i>
+                    </button>
+                    <ng-template #deleteModal let-modal>
+                      <div class="modal-header">
+                        <h4 class="modal-title">Confirmación de Eliminación</h4>
+                        <button type="button" class="btn-close" aria-label="Cerrar" (click)="modal.dismiss()"></button>
+                      </div>
+                      <div class="modal-body">
+                        <p>¿Estás seguro que deseas eliminar la categoría <strong>{{ product.name }}</strong>?</p>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" (click)="modal.close('confirm')">Sí, eliminar
+                        </button>
+                        <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Cancelar</button>
+                      </div>
+                    </ng-template>
+                  </td>
+                  <!-- PRODUCT NAME-->
+                  <td class="text-uppercase">{{ product.name }}</td>
+                  <!-- PRODUCT CATEGORY -->
+                  <td class="text-uppercase">{{ product.category_name }}</td>
+                  <!-- PRODUCT IMAGE AND MODAL PREVIEW -->
+                  <td>
+                    <i class="fa-regular fa-image fa-lg" style="cursor: pointer"
+                       (click)="openImageModal(previewModal)"></i>
+                    <ng-template #previewModal let-modal>
+                      <div class="modal-header">
+                        <h5 class="modal-title">Vista previa</h5>
+                        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+                      </div>
+                      <div class="modal-body text-center">
+                        <img [src]="product.imageUrl || '../../../../../../assets/images/product.png'"
+                             alt="Vista previa de la imagen"
+                             style="max-width: 30%; height: auto;"/>
+                      </div>
+                    </ng-template>
+                  </td>
+                  <!-- PRODUCT DESCRIPTION -->
+                  <td>{{ product.description }}</td>
+                  <!-- PRODUCT USER REGISTER -->
+                  <td>{{ product.created_by_name }}</td>
+                  <!-- PRODUCT DATE REGISTER -->
+                  <td>{{ product.createdAt.toMillis() | date:'mediumDate' }}</td>
+                  <!-- PRODUCT USER UPDATED -->
+                  <td>{{ product.updated_by_name }}</td>
+                  <!-- PRODUCT DATE UPDATED -->
+                  <td>{{ product.updatedAt.toMillis() | date:'mediumDate' }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+          <ngb-pagination
+            [collectionSize]="(filteredProducts$ | async)?.length || 0"
+            [(page)]="page"
+            [pageSize]="pageSize"
+            aria-label="Default pagination"
+          />
+
+        </div>
+      </div>
     </div>
   </div>
 </div>

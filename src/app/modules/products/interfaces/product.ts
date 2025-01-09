@@ -2,28 +2,33 @@ import {Timestamp} from '@angular/fire/firestore';
 
 export interface Product {
   id: string;
+  category_id: string;
   name: string;
   description: string;
   imageUrl: string;
   barCode: string;
-
-  category_id: string;
-  category_name?: string;
-
   createdBy: string;
   createdAt: Timestamp;
   updatedBy: string;
   updatedAt: Timestamp;
+
+  /** Display Fields **/
+  category_name?: string;
+  created_by_name?: string;
+  updated_by_name?: string;
 }
 
 export interface Category {
   id: string;
   name: string;
-
   createdBy: string;
   createdAt: Timestamp;
   updatedBy: string;
   updatedAt: Timestamp;
+
+  /** Display Fields **/
+  created_by_name?: string;
+  updated_by_name?: string;
 }
 
 export interface PosSale {

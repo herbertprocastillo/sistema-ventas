@@ -67,6 +67,7 @@ export class ProductsNewComponent {
     }
   }
 
+
   async onSubmit(): Promise<void> {
     if (this.newForm.valid) {
       if (!this.selectedFile) {

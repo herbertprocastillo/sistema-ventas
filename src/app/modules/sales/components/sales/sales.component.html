@@ -110,9 +110,9 @@
                         <tbody>
                         <tr class="text-nowrap text-center" *ngFor="let item of sale.items; let i = index">
                           <th scope="row">{{ i + 1 }}</th>
-                          <td>{{ item.productName }}</td>
+                          <td>{{ item.product_name }}</td>
                           <td>{{ item.quantity }}</td>
-                          <td>{{ item.price | number | currency:' S/. ' }}</td>
+                          <td>{{ item.price_sale | number | currency:' S/. ' }}</td>
                           <td>{{ item.subtotal | number | currency:' S/. ' }}</td>
                         </tr>
                         </tbody>

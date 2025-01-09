@@ -18,9 +18,9 @@ export class MovementsExportComponent {
       "PRODUCTO": item.product_name || 'Producto',
       "CANTIDAD": item.quantity || 0,
       "PRECIO COSTO": item.price || 0,
-      "REGISTRO POR": item.createdBy || 'Usuario',
+      "REGISTRO POR": item.created_by_name || 'Usuario',
       "FECHA DE REGISTRO": item.createdAt.toDate(),
-      "ACTUALIZADO POR": item.updatedBy || 'Usuario',
+      "ACTUALIZADO POR": item.updated_by_name || 'Usuario',
       "FECHA DE ACTUALIZACION": item.updatedAt.toDate(),
     }));
 

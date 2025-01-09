@@ -15,6 +15,12 @@
     <div class="navbar-collapse" [class.collapse]="collapsed" id="navbarContent">
       <ul class="navbar-nav ms-auto">
 
+        <li class="nav-item">
+          <a class="nav-link" tabindex="0" role="button" [routerLink]="'/warehouse/movements'">
+            MOVIMIENTOS
+          </a>
+        </li>
+
         <li class="nav-item" ngbDropdown display="dynamic" placement="bottom-end">
           <a class="nav-link" tabindex="0" ngbDropdownToggle id="navbarDropdown2" role="button">
             {{ displayName }}

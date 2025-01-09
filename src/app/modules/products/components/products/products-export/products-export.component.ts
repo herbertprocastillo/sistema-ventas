@@ -17,9 +17,9 @@ export class ProductsExportComponent {
       "CATEGORIA": item.category_name || 'Sin categoría',
       "PRODUCTO": item.name || 'Sin nombre',
       "DESCRIPCION": item.description || 'Sin descripción',
-      "REGISTRO POR": item.createdBy || 'Sin usuario',
+      "REGISTRO POR": item.created_by_name || 'Sin usuario',
       "FECHA DE REGISTRO": item.createdAt.toDate(),
-      "ACTUALIZADO POR": item.updatedBy || 'Sin usuario',
+      "ACTUALIZADO POR": item.updated_by_name || 'Sin usuario',
       "FECHA DE ACTUALIZACION": item.updatedAt.toDate(),
     }));
 

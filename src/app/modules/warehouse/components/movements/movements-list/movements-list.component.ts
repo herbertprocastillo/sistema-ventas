@@ -66,9 +66,9 @@ export class MovementsListComponent implements OnInit {
           const updatedBy = users.find(user => user.id === movement.updatedBy);
           return {
             ...movement,
-            product_name: product ? product.name : 'Sin producto',
-            createdBy: createdBy ? createdBy.displayName : 'Sin Usuario',
-            updatedBy: updatedBy ? updatedBy.displayName : 'Sin Usuario',
+            product_name: product ? product.name : '--',
+            created_by_name: createdBy ? createdBy.displayName : '--',
+            updated_by_name: updatedBy ? updatedBy.displayName : '--',
           };
         });
       })

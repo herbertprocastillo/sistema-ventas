@@ -1,1 +1,120 @@
-<p>categories works!</p>
+<app-products-navbar></app-products-navbar>
+
+<div class="container-fluid container-xxl mt-2 mt-xxl-3">
+
+  <!-- HEADER -->
+  <div class="card shadow rounded border-light-subtle p-2 p-xxl-3 mb-2 mb-xxl-3">
+    <div class="row">
+      <div class="col-12">
+        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+          <ol class="breadcrumb mb-1">
+            <li class="breadcrumb-item">
+              <i class="fa-solid fa-house fa-lg ms-2 mt-3" style="cursor: pointer" [routerLink]="'/home'"></i>
+            </li>
+            <li class="breadcrumb-item fs-5" style="cursor: pointer" aria-current="page"
+                [routerLink]="'/products'">
+              PRODUCTOS
+            </li>
+            <li class="breadcrumb-item active fs-5" aria-current="page">
+              CATEGORIAS
+            </li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+
+    <!----------------------------------------------->
+    <!-------------- FORM NEW & EDIT ---------------->
+    <div class="col-4">
+      @if (editCategory) {
+        <app-categories-edit [category]="editCategory" (editCancel)="getCancel($event)"/>
+      } @else {
+        <app-categories-new/>
+      }
+    </div>
+
+    <!---------------------------------------------->
+    <!------------------- LIST --------------------->
+    <div class="col-8">
+      <div class="card shadow rounded border-light-subtle p-2 p-xxl-3 mb-2 mb-xxl-3">
+        <div class="table-responsive">
+          <table class="table table-bordered text-center">
+            <thead>
+            <tr class="text-nowrap">
+              <th scope="col">#</th>
+              <th scope="col"></th>
+              <th scope="col"></th>
+              <th scope="col">CATEGORIA</th>
+              <th scope="col">REGISTRADO POR</th>
+              <th scope="col">FECHA DE REGISTRO</th>
+              <th scope="col">ACTUALIZADO POR</th>
+              <th scope="col">FECHA DE ACTUALIZACION</th>
+            </tr>
+            </thead>
+            <tbody>
+              @for (category of (filteredCategories$ | async)| slice:(page - 1) * pageSize: page * pageSize; track i; let i = $index) {
+                <tr class="text-nowrap">
+                  <th scope="row">{{ (page - 1) * pageSize + i + 1 }}</th>
+
+                  <!-- EDIT BUTTON -->
+                  <td>
+                    <button type="button" class="btn btn-primary btn-sm" (click)="getEditCategory(category)">
+                      <i class="fa-solid fa-pen-to-square"></i>
+                    </button>
+                  </td>
+
+                  <!-- BUTTON DELETE & MODAL DELETE -->
+                  <td>
+                    <button type="button" class="btn btn-danger btn-sm"
+                            (click)="openDeleteModal(deleteModal,category.id)">
+                      <i class="fa-regular fa-trash-can"></i>
+                    </button>
+                    <ng-template #deleteModal let-modal>
+                      <div class="modal-header">
+                        <h4 class="modal-title">Confirmación de Eliminación</h4>
+                        <button type="button" class="btn-close" aria-label="Cerrar" (click)="modal.dismiss()"></button>
+                      </div>
+                      <div class="modal-body">
+                        <p>¿Estás seguro que deseas eliminar la categoría <strong>{{ category.name }}</strong>?</p>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" (click)="modal.close('confirm')">Sí, eliminar
+                        </button>
+                        <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Cancelar</button>
+                      </div>
+                    </ng-template>
+                  </td>
+
+                  <!-- NAME -->
+                  <td class="text-uppercase">{{ category.name }}</td>
+
+                  <!-- CREATED BY -->
+                  <td>{{ category.created_by_name }}</td>
+
+                  <!-- CREATED AT -->
+                  <td>{{ category.createdAt.toMillis() | date:'mediumDate' }}</td>
+
+                  <!-- UPDATED BY -->
+                  <td>{{ category.updated_by_name }}</td>
+
+                  <!-- UPDATED AT -->
+                  <td>{{ category.updatedAt.toMillis() | date:'mediumDate' }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+          <ngb-pagination
+            [collectionSize]="(filteredCategories$ | async)?.length || 0"
+            [(page)]="page"
+            [pageSize]="pageSize"
+            aria-label="Default pagination"
+          />
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

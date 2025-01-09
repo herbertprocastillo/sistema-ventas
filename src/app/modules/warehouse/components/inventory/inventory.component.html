@@ -2,10 +2,11 @@
 
 <div class="container-fluid container-xxl mt-2 mt-xxl-3">
 
-  <!-- HEADER -->
+  <!---------------------------------------------->
+  <!------------------ HEADER -------------------->
   <div class="card shadow rounded border-light-subtle p-2 p-xxl-3 mb-2 mb-xxl-3">
     <div class="row">
-      <div class="col-3">
+      <div class="col-4">
         <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
           <ol class="breadcrumb mb-0">
             <li class="breadcrumb-item">
@@ -17,48 +18,45 @@
           </ol>
         </nav>
       </div>
-      <div class="col-2">
-        <!-- FILTER CATEGORY -->
-        <select
-          id="categorySelect"
-          class="form-select m-0"
-          [formControl]="categoryControl"
-        >
-          <option value="TODAS">CATEGORIAS</option>
-          <option *ngFor="let category of listCategories$ | async" [value]="category.id">
-            {{ category.name.toUpperCase() }}
-          </option>
-        </select>
-      </div>
-      <div class="col-4 p-0">
-        <!-- SEARCH PRODUCT -->
-        <input
-          type="text"
-          id="searchInput"
-          class="form-control"
-          placeholder="Buscar por nombre o código de barras."
-          [formControl]="searchControl"
-        >
-      </div>
-      <div class="col-3 text-end">
-        <!-- BTN MOVEMENT -->
-        <button type="button" class="btn btn-primary me-2" [routerLink]="'/warehouse/movements'">
-          <i class="fa-solid fa-right-left"></i>
-          MOVIMIENTOS
-        </button>
-
-        <!-- BTN EXCEL -->
-        <app-inventory-export [filteredData]="filteredInventories$.value"></app-inventory-export>
+      <div class="col-8 d-flex">
+        <!-- FILTER CATEGORIES -->
+        <div style="width: 30%" class="text-end">
+          <select
+            id="categorySelect"
+            class="form-select"
+            [formControl]="categoryControl"
+          >
+            <option value="TODAS">CATEGORIAS</option>
+            <option *ngFor="let category of listCategories$ | async" [value]="category.id">
+              {{ category.name.toUpperCase() }}
+            </option>
+          </select>
+        </div>
+        <!-- SEARCH FIELD -->
+        <div style="width: 52%" class="text-end">
+          <input
+            type="text"
+            id="searchInput"
+            class="form-control ms-2"
+            placeholder="Buscar por nombre o código de barras."
+            [formControl]="searchControl"
+          >
+        </div>
+        <!-- BUTTON -->
+        <div style="width: 18%" class="text-end">
+          <app-inventory-export [filteredData]="filteredInventories$.value"/>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- LIST -->
-  <div class="card shadow rounded border-0 p-2 p-xxl-3">
+  <!---------------------------------------------->
+  <!------------------- LIST --------------------->
+  <div class="card shadow rounded border-light-subtle p-2 p-xxl-3 mb-2 mb-xxl-3">
     <div class="table-responsive">
-      <table class="table table-bordered">
+      <table class="table table-bordered text-center">
         <thead>
-        <tr class="text-nowrap text-center">
+        <tr class="text-nowrap">
           <th scope="col">#</th>
           <th scope="col"></th>
           <th scope="col">PRODUCTO</th>
@@ -69,8 +67,8 @@
         </tr>
         </thead>
         <tbody>
-        <tr class="text-nowrap text-center"
-            *ngFor="let inventory of (filteredInventories$ | async) | slice:(page - 1) * pageSize:page * pageSize; let i = index">
+        <tr class="text-nowrap"
+            *ngFor="let inventory of filteredInventories$ | async | slice:(page - 1) * pageSize: page * pageSize; let i = index">
           <th scope="row">{{ (page - 1) * pageSize + i + 1 }}</th>
           <!-- BUTTON EDIT -->
           <td>
@@ -96,7 +94,7 @@
                       placeholder="Precio de Venta"
                       min="0"
                     />
-                    <label for="priceSale">Nuevo Precio de Venta</label>
+                    <label for="priceSale">Nuevo precio de Venta</label>
                   </div>
 
                   <!-- PRICE COST -->
@@ -109,7 +107,7 @@
                       placeholder="Precio de Costo"
                       min="0"
                     />
-                    <label for="priceSale">Nuevo Precio de Cost</label>
+                    <label for="priceSale">Nuevo precio de Costo</label>
                   </div>
 
                   <!-- STOCK -->

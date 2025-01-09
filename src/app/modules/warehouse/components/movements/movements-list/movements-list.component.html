@@ -1,6 +1,7 @@
 <div class="container-fluid container-xxl mt-2 mt-xxl-3">
 
-  <!-- HEADER -->
+  <!---------------------------------------------->
+  <!------------------ HEADER -------------------->
   <div class="card shadow rounded border-light-subtle p-2 p-xxl-3 mb-2 mb-xxl-3">
     <div class="row">
       <div class="col-6">
@@ -19,26 +20,27 @@
           </ol>
         </nav>
       </div>
-      <div class="col-6 text-end">
-        <!-- BTN NEW -->
+      <div class="col-6 d-flex justify-content-end">
+        <!-- BUTTON NEW -->
         <button type="button" class="btn btn-primary me-2" (click)="getTemplate('NEW')">
           <i class="fa-solid fa-plus"></i>
-          NUEVO
+          Nuevo
         </button>
 
-        <!-- BTN EXCEL -->
-        <app-movements-export [filteredData]="filteredMovements$.value"></app-movements-export>
+        <!-- BUTTON EXPORT -->
+        <app-movements-export [filteredData]="filteredMovements$.value"/>
+
       </div>
     </div>
   </div>
 
-
-  <!-- LIST -->
-  <div class="card shadow rounded border-0 p-2 p-xxl-3">
+  <!---------------------------------------------->
+  <!------------------- LIST --------------------->
+  <div class="card shadow rounded border-light-subtle p-2 p-xxl-3 mb-2 mb-xxl-3">
     <div class="table-responsive">
-      <table class="table table-bordered">
+      <table class="table table-bordered text-center">
         <thead>
-        <tr class="text-nowrap text-center">
+        <tr class="text-nowrap">
           <th scope="col">#</th>
           <th scope="col"></th>
           <th scope="col">MOVIMIENTO</th>
@@ -53,8 +55,8 @@
         </thead>
         <tbody>
           @for (movement of (filteredMovements$ | async) | slice:(page - 1) * pageSize: page * pageSize; track i; let i = $index) {
-            <tr class="text-nowrap text-center">
-              <th scope="row">{{ i + 1 }}</th>
+            <tr class="text-nowrap">
+              <th scope="row">{{ (page - 1) * pageSize + i + 1 }}</th>
 
               <!-- BUTTON DELETE & MODAL DELETE -->
               <td>
@@ -77,18 +79,18 @@
                   </div>
                 </ng-template>
               </td>
+
               <!-- TYPE MOVEMENT -->
               <td class="text-white" [ngStyle]="{'background-color': movement.type === 'INGRESO' ? 'green':'red'}">
                 {{ movement.type }}
               </td>
+
               <!-- PRODUCT INFO -->
-              <td>
-                {{ movement.product_name }}
-              </td>
+              <td>{{ movement.product_name }}</td>
+
               <!-- QUANTITY -->
-              <td>
-                {{ movement.quantity }}
-              </td>
+              <td>{{ movement.quantity }}</td>
+
               <!-- PRICE -->
               <td *ngIf="movement.type ==='INGRESO'">
                 {{ movement.price | currency: 'S/. ' }}
@@ -98,13 +100,13 @@
               </td>
 
               <!-- USER REGISTER -->
-              <td>{{ movement.createdBy }}</td>
+              <td>{{ movement.created_by_name }}</td>
 
               <!-- DATE REGISTER -->
               <td>{{ movement.createdAt.toMillis() | date:'mediumDate' }}</td>
 
               <!-- USER UPDATED -->
-              <td>{{ movement.updatedBy }}</td>
+              <td>{{ movement.updated_by_name }}</td>
 
               <!-- DATE UPDATED -->
               <td>{{ movement.updatedAt?.toMillis() | date:'mediumDate' }}</td>
@@ -113,12 +115,12 @@
           }
         </tbody>
       </table>
+      <ngb-pagination
+        [collectionSize]="(filteredMovements$ | async)?.length || 0"
+        [(page)]="page"
+        [pageSize]="pageSize"
+        aria-label="Default pagination"
+      />
     </div>
-    <ngb-pagination
-      [collectionSize]="(filteredMovements$ | async)?.length || 0"
-      [(page)]="page"
-      [pageSize]="pageSize"
-      aria-label="Default pagination"
-    ></ngb-pagination>
   </div>
 </div>
