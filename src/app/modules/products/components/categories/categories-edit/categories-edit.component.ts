@@ -1,22 +1,18 @@
 import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
 import {Category} from '../../../interfaces/product';
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {ProductsService} from '../../../services/products.service';
 import {ToastService} from '../../../../../shared/toast/services/toast.service';
 import {NgIf} from '@angular/common';
-import {ProductsService} from '../../../services/products.service';
 
 @Component({
-  selector: 'app-products-category-edit',
+  selector: 'app-categories-edit',
   standalone: true,
-  imports: [
-    FormsModule,
-    ReactiveFormsModule,
-    NgIf
-  ],
-  templateUrl: './products-category-edit.component.html',
-  styleUrl: './products-category-edit.component.scss'
+  imports: [NgIf, ReactiveFormsModule],
+  templateUrl: './categories-edit.component.html',
+  styleUrl: './categories-edit.component.scss'
 })
-export class ProductsCategoryEditComponent implements OnInit {
+export class CategoriesEditComponent implements OnInit {
   /** IO **/
   @Input() category: Category | null = null;
   @Output() editCancel = new EventEmitter<boolean>();
@@ -26,14 +22,10 @@ export class ProductsCategoryEditComponent implements OnInit {
   private productsService = inject(ProductsService);
   private toastService = inject(ToastService);
 
-  /** VARIABLES **/
-  public editForm: FormGroup;
-
-  constructor() {
-    this.editForm = this.fb.group({
-      name: ['', [Validators.required]],
-    });
-  }
+  /** FORM **/
+  public editForm: FormGroup = this.fb.group({
+    name: ['', [Validators.required]],
+  });
 
   ngOnInit(): void {
     if (this.category) {
@@ -51,12 +43,12 @@ export class ProductsCategoryEditComponent implements OnInit {
 
       try {
         await this.productsService.updateCategory(category.id, category);
-        this.toastService.showSuccess("Categoria actualizada con EXITO!.");
+        this.toastService.showSuccess("EXITO! Categoria actualizada correctamente..");
         this.editForm.reset();
         this.getCancel(true);
 
       } catch (e) {
-        this.toastService.showError(`${e}`);
+        this.toastService.showError(`ERROR! al editar la categoria: ${e}`);
         console.error(e);
       }
     } else {
@@ -64,5 +56,4 @@ export class ProductsCategoryEditComponent implements OnInit {
       return;
     }
   }
-
 }

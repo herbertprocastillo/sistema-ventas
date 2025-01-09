@@ -1,0 +1,169 @@
+<div class="container-fluid container-xxl mt-2 mt-xxl-3">
+
+  <!---------------------------------------------->
+  <!------------------ HEADER -------------------->
+  <div class="card shadow rounded border-light-subtle p-2 p-xxl-3 mb-2 mb-xxl-3">
+    <div class="row">
+      <div class="col-12">
+        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+          <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item">
+              <i class="fa-solid fa-house fa-lg ms-2 mt-3" style="cursor: pointer" [routerLink]="'/home'"></i>
+            </li>
+            <li class="breadcrumb-item fs-5" aria-current="page" style="cursor: pointer" (click)="getTemplate('LIST')">
+              COMPRAS
+            </li>
+            <li class="breadcrumb-item active fs-5" aria-current="page">
+              NUEVA ORDEN
+            </li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+
+  <!------------------------------------------------->
+  <!---------------- NEW FORM ORDER ----------------->
+  <div class="card shadow rounded border-light-subtle p-3 p-xxl-3 mb-2 mb-xxl-3">
+    <form [formGroup]="newForm" (ngSubmit)="onSubmit()">
+
+      <!-- ORDER DATA -->
+      <div class="row mb-3">
+        <!-- SUPPLIER -->
+        <div class="col-4 col-xl-3">
+          <div class="form-floating">
+            <select
+              class="form-select"
+              id="supplierSelect"
+              formControlName="supplier_id"
+              required
+            >
+              <option *ngFor="let supplier of listSuppliers$ | async"
+                      value="{{supplier.id}}">{{ supplier.company.toUpperCase() }}
+              </option>
+            </select>
+            <label for="supplierSelect"><span class="fw-medium">SELECCIONE PROVEEDOR</span></label>
+          </div>
+        </div>
+
+        <!-- COMMENTS -->
+        <div class="col-5 col-xl-6">
+          <div class="form-floating">
+            <textarea
+              class="form-control"
+              formControlName="comments"
+              placeholder="Observaciones"
+              id="floatingTextarea"
+              style="height: 80px"
+            ></textarea>
+            <label for="floatingTextarea">Observaciones</label>
+          </div>
+        </div>
+
+        <!-- DATE -->
+        <div class="col-3 col-xl-3">
+          <ul class="list-group">
+            <li class="list-group-item d-flex justify-content-between"><span
+              class="fw-medium">ORDEN Nº</span> {{ this.purchaseOrderNumber || 'Cargando...' }}
+            </li>
+            <li class="list-group-item d-flex justify-content-between"><span
+              class="fw-medium">FECHA</span> {{ today.toISOString() | date:'mediumDate' }}
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- LIST PRODUCTS -->
+      <div class="row">
+        <div class="col-12">
+
+          <!-- HEADER LIST -->
+          <ul class="list-group">
+            <li class="list-group-item">
+              <div style="width: 100%" class="d-flex text-center">
+                <div style="width: 50%;" class="ps-2 pe-2">
+                  <p class="fw-medium mb-0">PRODUCTO</p>
+                </div>
+                <div style="width: 15%;" class="ps-2 pe-2">
+                  <p class="fw-medium mb-0">CANTIDAD</p>
+                </div>
+                <div style="width: 15%;" class="ps-2 pe-2">
+                  <p class="fw-medium mb-0">PRECIO UNI</p>
+                </div>
+                <div style="width: 15%;" class="ps-2 pe-2">
+                  <p class="fw-medium mb-0">SUBTOTAL</p>
+                </div>
+                <div style="width: 5%;">
+                </div>
+              </div>
+            </li>
+          </ul>
+
+          <!-- PRODUCT LIST -->
+          <ul id="list-products" class="list-group mb-2" formArrayName="products">
+            <li
+              class="list-group-item p-1"
+              *ngFor="let product of productForms.controls; let i = index"
+              [formGroupName]="i"
+            >
+              <div style="width: 100%" class="d-flex text-center">
+                <div style="width: 50%;" class="ps-2 pe-2">
+                  <select formControlName="product_id" class="form-select">
+                    <option *ngFor="let product of listProducts$ | async" [value]="product.id">
+                      {{ product.name }}
+                    </option>
+                  </select>
+                </div>
+                <div style="width: 15%;" class="ps-2 pe-2">
+                  <input type="number" formControlName="quantity" class="form-control text-center"
+                         (input)="updateSubTotal(i)"/>
+                </div>
+                <div style="width: 15%;" class="ps-2 pe-2">
+                  <input type="number" formControlName="unitPrice" class="form-control text-center"
+                         (input)="updateSubTotal(i)"/>
+                </div>
+                <div style="width: 15%;" class="ps-2 pe-2">
+                  <input type="number" formControlName="subTotal" class="form-control text-center" readonly/>
+                </div>
+                <div style="width: 5%;">
+                  <button type="button" class="btn btn-danger btn-sm" (click)="removeProduct(i)">
+                    <i class="fa-solid fa-minus"></i>
+                  </button>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <hr class="text-muted">
+
+      <!-- TOTAL -->
+      <div class="row mb-3">
+        <div class="col-3">
+          <button type="button" class="btn btn-primary" (click)="addProduct()">
+            Agregar Producto
+          </button>
+        </div>
+        <div class="col-3 offset-6 text-end">
+          <p class="fw-bold">TOTAL: {{ calculateTotal() | currency:'S/.' }}</p>
+        </div>
+      </div>
+
+      <!-- SAVE ORDER -->
+      <div class="row">
+        <div class="col-2 offset-8">
+          <button type="reset" class="btn btn-danger w-100" (click)="getCancel(true)">
+            CANCELAR
+          </button>
+        </div>
+        <div class="col-2 col-xl-2">
+          <button type="submit" class="btn btn-success w-100">
+            GUARDAR
+          </button>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>

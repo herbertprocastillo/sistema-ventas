@@ -1,4 +1,4 @@
-<div id="newCategory" class="card shadow rounded border-light-subtle p-3">
+<div class="card shadow rounded border-light-subtle p-2 p-xxl-3 mb-2 mb-xxl-3">
   <p class="fs-6 fw-bold">NUEVA CATEGORIA</p>
 
   <form [formGroup]="newForm" (ngSubmit)="onSubmit()">
@@ -13,6 +13,11 @@
         required
       >
       <label for="nameInput">Por Ejemplo: Bebidas, Galletas, Kekes etc.</label>
+      <div
+        *ngIf="newForm.controls['name'].invalid && (newForm.controls['name'].dirty)"
+        class="text-danger">
+        El nombre de la categoría es obligatorio.
+      </div>
     </div>
 
     <!-- BUTTON -->

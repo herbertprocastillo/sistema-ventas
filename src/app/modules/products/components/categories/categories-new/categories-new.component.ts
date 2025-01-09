@@ -1,22 +1,23 @@
 import {Component, inject} from '@angular/core';
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {ToastService} from '../../../../../shared/toast/services/toast.service';
 import {ProductsService} from '../../../services/products.service';
+import {ToastService} from '../../../../../shared/toast/services/toast.service';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {NgIf} from '@angular/common';
 
 @Component({
-  selector: 'app-products-category-new',
+  selector: 'app-categories-new',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule],
-  templateUrl: './products-category-new.component.html',
-  styleUrl: './products-category-new.component.scss'
+  imports: [ReactiveFormsModule, NgIf],
+  templateUrl: './categories-new.component.html',
+  styleUrl: './categories-new.component.scss'
 })
-export class ProductsCategoryNewComponent {
+export class CategoriesNewComponent {
   /** INJECTS **/
   private productsService = inject(ProductsService);
   private toastService = inject(ToastService);
   private fb = inject(FormBuilder);
 
-  /** VARIABLES **/
+  /** FORM **/
   public newForm: FormGroup = this.fb.group({
     name: ['', [Validators.required]],
   });
@@ -27,11 +28,11 @@ export class ProductsCategoryNewComponent {
 
       try {
         await this.productsService.addCategory(category);
-        this.toastService.showSuccess('Categoria registrada con EXITO!');
+        this.toastService.showSuccess('EXITO! Categoria registrada correctamente.');
         this.newForm.reset();
 
       } catch (e) {
-        this.toastService.showError(`${e}`);
+        this.toastService.showError(`ERROR! al registrar la categoria: ${e}`);
         console.error(e);
       }
     } else {

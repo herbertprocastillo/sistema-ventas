@@ -1,0 +1,155 @@
+<div class="container-fluid container-xxl mt-2 mt-xxl-3">
+
+  <!-----------------------------------------------------------
+   --------------------------- HEADER -------------------------
+   ------------------------------------------------------------>
+  <div class="card shadow rounded border-light-subtle p-2 p-xxl-3 mb-2 mb-xxl-3">
+    <div class="row">
+      <div class="col-3">
+        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+          <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item">
+              <i class="fa-solid fa-house fa-lg ms-2 mt-3" style="cursor: pointer" [routerLink]="'/home'"></i>
+            </li>
+            <li class="breadcrumb-item active fs-5" aria-current="page">
+              COMPRAS
+            </li>
+          </ol>
+        </nav>
+      </div>
+      <div class="col-9">
+        <div class="row justify-content-end">
+          <div class="col-auto pe-0">
+            <p class="fw-medium mt-1 m-0">Estado:</p>
+          </div>
+          <div class="col-auto pe-0">
+            <select
+              id="statusSelect"
+              class="form-select"
+              [formControl]="statusControl"
+            >
+              <option value="TODAS">TODAS</option>
+              <option value="COMPLETA">COMPLETAS</option>
+              <option value="ANULADA">ANULADAS</option>
+            </select>
+          </div>
+          <div class="col-auto pe-0">
+            <p class="fw-medium mt-1 m-0">Fecha:</p>
+          </div>
+          <div class="col-auto pe-0">
+            <input
+              id="dateFilter"
+              class="form-control"
+              type="date"
+              [value]="selectedDate"
+              (change)="onDateChange($event)"
+            />
+          </div>
+          <div class="col-auto pe-0">
+            <!-- BUTTON NEW -->
+            <button type="button" class="btn btn-primary" (click)="getTemplate('NEW')">
+              <i class="fa-solid fa-plus"></i>
+              Nuevo
+            </button>
+          </div>
+          <div class="col-auto">
+            <!-- BUTTON EXPORT -->
+            <app-purchasing-export [filteredData]="filteredOrders$.value"/>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-----------------------------------------------------------
+   ----------------------- LIST ORDERS ------------------------
+   ------------------------------------------------------------>
+  <div class="card shadow rounded border-light-subtle p-2 p-xxl-3 mb-2 mb-xxl-3">
+    <div class="table-responsive mb-1">
+      <table class="table table-bordered text-center">
+        <thead>
+        <tr class="text-nowrap">
+          <th scope="col">#</th>
+          <th scope="col"></th>
+          <th scope="col">ESTADO</th>
+          <th scope="col">Nº ORDEN</th>
+          <th scope="col">FECHA</th>
+          <th scope="col">TOTAL</th>
+          <th scope="col">EMPRESA</th>
+          <th scope="col">RUC</th>
+          <th scope="col">REPRESENTANTE</th>
+          <th scope="col">DNI</th>
+          <th scope="col">TELEFONO</th>
+          <th scope="col">USUARIO REGISTRO</th>
+          <th scope="col">FECHA REGISTRO</th>
+          <th scope="col">USUARIO ACTUALIZACIÓN</th>
+          <th scope="col">FECHA ACTUALIZACIÓN</th>
+          <th scope="col">OBSERVACIONES</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="text-nowrap"
+            *ngFor="let order of (filteredOrders$ | async)| slice:(page - 1) * pageSize: page * pageSize; let i = index">
+          <th scope="row">{{ (page - 1) * pageSize + i + 1 }}</th>
+          <!-- BUTTON VIEW -->
+          <td>
+            <button type="button" class="btn btn-info btn-sm" (click)="getOrder(order)">
+              <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+          </td>
+
+          <!-- STATE -->
+          <td class="text-white" [ngStyle]="{'background-color': order.status === 'COMPLETA' ? 'green':'red'}">
+            {{ order.status }}
+          </td>
+
+          <!-- ORDER NUMBER -->
+          <td class="text-uppercase">{{ order.orderNumber }}</td>
+
+          <!-- DATE -->
+          <td class="text-uppercase">{{ order.createdAt.toMillis() | date:'mediumDate' }}</td>
+
+          <!-- TOTAL AMOUNT -->
+          <td class="text-uppercase">{{ order.total }}</td>
+
+          <!-- COMPANY -->
+          <td class="text-uppercase">{{ order.supplier_company }}</td>
+
+          <!-- RUC -->
+          <td>{{ order.supplier_ruc }}</td>
+
+          <!-- SUPPLIER NAME -->
+          <td>{{ order.supplier_name }}</td>
+
+          <!-- SUPPLIER DNI -->
+          <td>{{ order.supplier_dni }}</td>
+
+          <!-- SUPPLIER PHONE -->
+          <td>{{ order.supplier_phone }}</td>
+
+          <!-- USER REGISTER -->
+          <td>{{ order.created_by_name }}</td>
+
+          <!--  DATE REGISTER -->
+          <td>{{ order.createdAt.toMillis() | date:'mediumDate' }}</td>
+
+          <!-- USER UPDATED -->
+          <td>{{ order.updated_by_name }}</td>
+
+          <!-- DATE UPDATED -->
+          <td>{{ order.updatedAt.toMillis() | date:'mediumDate' }}</td>
+
+          <!-- COMMENTS -->
+          <td>{{ order.comments }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <ngb-pagination
+      [collectionSize]="(filteredOrders$ | async)?.length || 0"
+      [(page)]="page"
+      [pageSize]="pageSize"
+      aria-label="Default pagination"
+    />
+  </div>
+</div>

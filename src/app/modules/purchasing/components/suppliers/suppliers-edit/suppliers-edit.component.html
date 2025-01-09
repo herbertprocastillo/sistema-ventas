@@ -1,0 +1,119 @@
+<div class="card shadow rounded border-light-subtle p-3">
+  <p class="fs-6 fw-bold">EDITAR PROVEEDOR</p>
+
+  <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+
+    <!-- COMPANY -->
+    <div class="form-floating mb-3">
+      <input
+        type="text"
+        class="form-control"
+        id="companyInput"
+        formControlName="company"
+        required
+      >
+      <label for="companyInput"><span class="fw-medium">EMPRESA: </span></label>
+    </div>
+
+    <!-- RUC -->
+    <div class="form-floating mb-3">
+      <input
+        type="text"
+        class="form-control"
+        id="rucInput"
+        formControlName="ruc"
+        maxlength="11"
+      />
+      <label for="rucInput"><span class="fw-medium">RUC: </span></label>
+      <div *ngIf="editForm.get('ruc')?.touched && editForm.get('ruc')?.invalid" class="text-danger mt-1">
+        <small *ngIf="editForm.get('ruc')?.errors?.['required']">El RUC es obligatorio.</small>
+        <small *ngIf="editForm.get('ruc')?.errors?.['pattern']">El RUC debe tener 11 dígitos numéricos.</small>
+      </div>
+    </div>
+
+    <!-- FULL NAME -->
+    <div class="form-floating mb-3">
+      <input
+        type="text"
+        class="form-control"
+        id="fullNameInput"
+        formControlName="fullName">
+      <label for="fullNameInput"><span class="fw-medium">REPRESENTANTE: </span></label>
+    </div>
+
+    <!-- DNI -->
+    <div class="form-floating mb-3">
+      <input
+        type="text"
+        class="form-control"
+        id="dniInput"
+        formControlName="dni"
+        maxlength="8"
+      />
+      <label for="dniInput"><span class="fw-medium">DNI: </span></label>
+      <div *ngIf="editForm.get('dni')?.touched && editForm.get('dni')?.invalid" class="text-danger mt-1">
+        <small *ngIf="editForm.get('dni')?.errors?.['required']">El DNI es obligatorio.</small>
+        <small *ngIf="editForm.get('dni')?.errors?.['pattern']">El DNI debe tener 8 dígitos numéricos.</small>
+      </div>
+    </div>
+
+    <!-- PHONE -->
+    <div class="form-floating mb-3">
+      <input
+        type="text"
+        class="form-control"
+        id="phoneInput"
+        formControlName="phone"
+        maxlength="9"
+      />
+      <label for="phoneInput"><span class="fw-medium">TELÉFONO CELULAR:</span></label>
+      <div *ngIf="editForm.get('phone')?.touched && editForm.get('phone')?.invalid" class="text-danger mt-1">
+        <small *ngIf="editForm.get('phone')?.errors?.['required']">El teléfono es obligatorio.</small>
+        <small *ngIf="editForm.get('phone')?.errors?.['pattern']">
+          El teléfono celular debe tener 9 dígitos numéricos.
+        </small>
+      </div>
+    </div>
+
+    <!-- EMAIL -->
+    <div class="form-floating mb-3">
+      <input
+        type="email"
+        class="form-control"
+        id="emailInput"
+        formControlName="email"
+      />
+      <label for="emailInput"><span class="fw-medium">CORREO ELECTRÓNICO:</span></label>
+      <div *ngIf="editForm.get('email')?.touched && editForm.get('email')?.invalid" class="text-danger mt-1">
+        <small *ngIf="editForm.get('email')?.errors?.['email']">
+          El correo electrónico no tiene un formato válido.
+        </small>
+      </div>
+    </div>
+
+    <!-- ADDRESS -->
+    <div class="form-floating mb-3">
+      <input
+        type="text"
+        class="form-control"
+        id="addressInput"
+        formControlName="address">
+      <label for="addressInput"><span class="fw-medium">DIRECCIÓN: </span></label>
+    </div>
+
+    <!-- BUTTONS -->
+    <div class="row">
+      <div class="col-6">
+        <button type="reset" class="btn btn-danger w-100" (click)="getCancel(true)">
+          CANCELAR
+        </button>
+      </div>
+      <div class="col-6">
+        <button type="submit" class="btn btn-primary w-100" [disabled]="editForm.invalid">
+          ACTUALIZAR
+        </button>
+      </div>
+    </div>
+
+  </form>
+</div>
