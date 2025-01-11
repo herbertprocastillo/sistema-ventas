@@ -1,0 +1,113 @@
+<app-pos-navbar/>
+
+
+<div class="container-fluid container-xxl mt-2 mt-xxl-3">
+
+  <!---------------------------------------------------->
+  <!--------------------- HEADER ----------------------->
+  <div class="card shadow rounded border-light-subtle p-2 p-xxl-3 mb-2 mb-xxl-3">
+    <div class="row">
+      <div class="col-4">
+        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+          <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item">
+              <i class="fa-solid fa-house fa-lg ms-2 mt-3" style="cursor: pointer" [routerLink]="'/home'"></i>
+            </li>
+            <li class="breadcrumb-item fs-5 active" aria-current="page" style="cursor: pointer">
+              CAJA
+            </li>
+          </ol>
+        </nav>
+      </div>
+      <div class="col-8 text-end">
+        <!-- BUTTON -->
+        <app-cash-register-export [filteredData]="filteredCashRegisters$.value"/>
+      </div>
+    </div>
+  </div>
+
+  <!---------------------------------------------------->
+  <!------------------ FORM & LIST --------------------->
+  <div class="row">
+    <div class="col-4">
+
+      @if (editCashRegister) {
+        <app-cash-register-edit
+          [cashRegister]="editCashRegister"
+          (editCancel)="getCancel($event)"
+        />
+      } @else {
+        <app-cash-register-new
+        />
+      }
+
+    </div>
+    <div class="col-8">
+      <div class="card shadow rounded border-light-subtle p-2 p-xxl-3 mb-2 mb-xxl-3">
+        <div class="table-responsive mb-1">
+          <table class="table table-bordered text-center">
+            <thead>
+            <tr class="text-nowrap">
+              <th scope="col">#</th>
+              <th scope="col"></th>
+              <th scope="col">Nº CAJA</th>
+              <th scope="col">ESTADO</th>
+              <th scope="col">VENDEDOR</th>
+              <th scope="col">HORA APERTURA</th>
+              <th scope="col">HORA CIERRE</th>
+              <th scope="col">MONTO APERTURA</th>
+              <th scope="col">MONTO CIERRE</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="text-nowrap"
+                *ngFor="let cashRegister of (filteredCashRegisters$ | async)| slice:(page - 1) * pageSize: page * pageSize; let i = index">
+              <th scope="row">{{ (page - 1) * pageSize + i + 1 }}</th>
+              <!-- BUTTON EDIT -->
+              <td>
+                <button type="button" class="btn btn-primary btn-sm" (click)="getEditCashRegister(cashRegister)">
+                  <i class="fa-solid fa-pen-to-square"></i>
+                </button>
+              </td>
+
+              <!-- NUMBER -->
+              <td>{{ cashRegister.number }}</td>
+
+              <!-- STATUS -->
+              <td>{{ cashRegister.status }}</td>
+
+              <!-- SELLER -->
+              <td class="text-uppercase">{{ cashRegister.seller }}</td>
+
+              <!-- OPENING DATE -->
+              <td>{{ cashRegister.openDate }}</td>
+
+              <!-- ENDING DATE -->
+              <td>{{ cashRegister.closeDate }}</td>
+
+              <!-- OPENING AMOUNT -->
+              <td>{{ cashRegister.openingAmount }}</td>
+
+              <!-- TOTAL AMOUNT -->
+              <td>{{ cashRegister.totalAmount }}</td>
+
+              <!-- USER REGISTER -->
+              <td class="text-uppercase">{{ cashRegister.created_by_name }}</td>
+
+              <!-- DATE REGISTER -->
+              <td>{{ cashRegister.createdAt.toMillis() | date:'mediumDate' }}</td>
+            </tr>
+
+            </tbody>
+          </table>
+        </div>
+        <ngb-pagination
+          [collectionSize]="(filteredCashRegisters$ | async)?.length || 0"
+          [(page)]="page"
+          [pageSize]="pageSize"
+          aria-label="Default pagination"
+        />
+      </div>
+    </div>
+  </div>
+</div>

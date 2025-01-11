@@ -1,9 +1,9 @@
 import {Component, EventEmitter, inject, Input, Output} from '@angular/core';
 import {FormsModule} from '@angular/forms';
-import {Sale, SaleItem} from '../../../sales/interfaces/sale';
-import {SalesService} from '../../../sales/services/sales.service';
+import {Sale, SaleItem} from '../../../../sales/interfaces/sale';
+import {SalesService} from '../../../../sales/services/sales.service';
 import {NgIf} from '@angular/common';
-import {ToastService} from '../../../../shared/toast/services/toast.service';
+import {ToastService} from '../../../../../shared/toast/services/toast.service';
 
 @Component({
   selector: 'app-pos-checkout',

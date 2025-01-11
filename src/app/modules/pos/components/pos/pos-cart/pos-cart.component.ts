@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {NgForOf} from '@angular/common';
-import {SaleItem} from '../../../sales/interfaces/sale';
+import {SaleItem} from '../../../../sales/interfaces/sale';
 
 @Component({
   selector: 'app-pos-cart',

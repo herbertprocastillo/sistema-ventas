@@ -11,8 +11,8 @@ import {
 } from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {NgForOf} from '@angular/common';
-import {PosSale} from '../../../products/interfaces/product';
-import {WarehouseService} from '../../../warehouse/services/warehouse.service';
+import {PosSale} from '../../../../products/interfaces/product';
+import {WarehouseService} from '../../../../warehouse/services/warehouse.service';
 import {Subject, takeUntil} from 'rxjs';
 
 @Component({

@@ -1,13 +1,16 @@
-import {Component, inject} from '@angular/core';
-import {PosNavbarComponent} from '../pos-navbar/pos-navbar.component';
-import {PosProductsComponent} from '../pos-products/pos-products.component';
-import {PosCartComponent} from '../pos-cart/pos-cart.component';
-import {PosCheckoutComponent} from '../pos-checkout/pos-checkout.component';
+import {Component, inject, OnInit} from '@angular/core';
+import {PosNavbarComponent} from './pos-navbar/pos-navbar.component';
+import {PosProductsComponent} from './pos-products/pos-products.component';
+import {PosCartComponent} from './pos-cart/pos-cart.component';
+import {PosCheckoutComponent} from './pos-checkout/pos-checkout.component';
 import {PosSale} from '../../../products/interfaces/product';
 import {SaleItem} from '../../../sales/interfaces/sale';
 
 import {Field} from '../../../fields/interfaces/field';
 import {ToastService} from '../../../../shared/toast/services/toast.service';
+import {AuthService} from '../../../auth/services/auth.service';
+import {PosService} from '../../services/pos.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-pos',
@@ -16,12 +19,28 @@ import {ToastService} from '../../../../shared/toast/services/toast.service';
   templateUrl: './pos.component.html',
   styleUrl: './pos.component.scss'
 })
-export class PosComponent {
+export class PosComponent implements OnInit {
   /** INJECTS **/
   private toastService = inject(ToastService);
+  private authService = inject(AuthService);
+  private posService = inject(PosService);
+  private router = inject(Router);
 
   /** COLLECTIONS **/
   public cartItems: SaleItem[] = [];
+
+  ngOnInit(): void {
+    const user = this.authService.getCurrentUser();
+
+    if (user) {
+      this.posService.getOpenCashRegisterByUser(user.uid)
+        .subscribe(cashRegister => {
+          if (!cashRegister) {
+            this.router.navigate(['pos/cashRegister']);
+          }
+        })
+    }
+  }
 
   /** ADD NEW PRODUCT TO SHOPPING CART **/
   addToCart(product: PosSale): void {

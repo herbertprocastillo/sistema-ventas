@@ -13,7 +13,7 @@ export interface PurchaseOrder {
   }[];
   total: number;
   comments?: string;
-  status: string;/* COMPLETA - ANULADA*/
+  status: string;
   createdBy: string;
   createdAt: Timestamp;
   updatedBy?: string;
